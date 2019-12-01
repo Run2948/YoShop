@@ -101,14 +101,14 @@ namespace YoShop.Controllers
         /// <param name="fileIds"></param>
         /// <returns></returns>
         [HttpPost, Route("/upload.library/moveFiles")]
-        public IActionResult LibraryMoveFiles(uint group_id, uint[] fileIds)
+        public async Task<IActionResult> LibraryMoveFiles(uint group_id, uint[] fileIds)
         {
             try
             {
                 if (fileIds.Length > 0)
                 {
-                    _fsql.Update<UploadFile>().Set(l => l.GroupId == group_id).Where(l => fileIds.Contains(l.FileId))
-                        .ExecuteAffrows();
+                   await _fsql.Update<UploadFile>().Set(l => l.GroupId == group_id).Where(l => fileIds.Contains(l.FileId))
+                        .ExecuteAffrowsAsync();
                 }
             }
             catch (Exception e)
@@ -124,14 +124,14 @@ namespace YoShop.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost, Route("/upload.library/deleteFiles")]
-        public IActionResult LibraryDeleteFiles(uint[] fileIds)
+        public async Task<IActionResult> LibraryDeleteFiles(uint[] fileIds)
         {
             try
             {
                 if (fileIds.Length > 0)
                 {
-                    _fsql.Update<UploadFile>().Set(l => l.IsDelete == 0).Where(l => fileIds.Contains(l.FileId))
-                        .ExecuteAffrows();
+                   await _fsql.Update<UploadFile>().Set(l => l.IsDelete == 0).Where(l => fileIds.Contains(l.FileId))
+                        .ExecuteAffrowsAsync();
                 }
             }
             catch (Exception e)
@@ -232,7 +232,7 @@ namespace YoShop.Controllers
                 return No(e.Message);
             }
 
-            return YesResult("添加成功！", new { group_id, request.group_name });
+            return YesResult("添加成功！", new { groupId = group_id, groupName = request.group_name });
         }
 
         /// <summary>
@@ -267,7 +267,7 @@ namespace YoShop.Controllers
         {
             try
             {
-                var _ = await _fsql.Delete<UploadFile>().Where(l => l.GroupId == group_id).ExecuteAffrowsAsync();
+                var _ = await _fsql.Delete<UploadGroup>().Where(l => l.GroupId == group_id).ExecuteAffrowsAsync();
                 if (_ > 0)
                     await _fsql.Update<UploadFile>().Set(l => l.GroupId == 0).Where(l => l.GroupId == group_id).ExecuteAffrowsAsync();
             }

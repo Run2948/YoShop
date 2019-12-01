@@ -75,10 +75,10 @@ namespace YoShop.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet, Route("/goods.category/edit/category_id/{id}")]
+        [HttpGet, Route("/goods.category/edit/categoryId/{id}")]
         public async Task<IActionResult> Edit(uint id)
         {
-            var model = _fsql.Select<Category>().Where(c => c.CategoryId == id).Include(c => c.UploadFile).ToOneAsync();
+            var model = await _fsql.Select<Category>().Where(c => c.CategoryId == id).Include(c => c.UploadFile).ToOneAsync();
             if (model == null) return NoOrDeleted();
             var list = await _fsql.Select<Category>().Where(l => l.ParentId == 0).ToListAsync();
             ViewData["first"] = list.Mapper<List<CategoryDto>>();
@@ -91,7 +91,7 @@ namespace YoShop.Controllers
         /// <param name="viewModel"></param>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpPost, Route("/goods.category/edit/category_id/{id}")]
+        [HttpPost, Route("/goods.category/edit/categoryId/{id}")]
         public async Task<IActionResult> Edit(CategoryDto viewModel, uint id)
         {
             var model = await _fsql.Select<Category>().Where(c => c.CategoryId == id).ToOneAsync();
@@ -103,7 +103,7 @@ namespace YoShop.Controllers
                 model.Sort = viewModel.Sort;
                 model.ImageId = viewModel.ImageId;
                 model.UpdateTime = DateTime.Now.ConvertToTimeStamp();
-                _fsql.Update<Category>(model).ExecuteAffrows();
+                await _fsql.Update<Category>().SetSource(model).ExecuteAffrowsAsync();
             }
             catch (Exception e)
             {

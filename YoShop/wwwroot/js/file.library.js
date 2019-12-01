@@ -276,8 +276,8 @@
                             var $groupSelectList = _this.$element.find('.group-select > .group-list');
                             $groupSelectList.append(
                                 '<li>' +
-                                '    <a class="move-file-group" data-group-id="' + result.data.group_id + '"' +
-                                '       href="javascript:void(0);">' + result.data.group_name + '</a>' +
+                                '    <a class="move-file-group" data-group-id="' + result.data.groupId + '"' +
+                                '       href="javascript:void(0);">' + result.data.groupName + '</a>' +
                                 '</li>'
                             );
                         }
