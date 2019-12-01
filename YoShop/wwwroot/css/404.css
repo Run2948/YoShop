@@ -1,0 +1,42 @@
+ul {margin:0;padding:0;}
+a {text-decoration: none;}
+
+body{
+	background: rgb(236,236,236);
+	margin:0;padding:0;
+	font-family:"Microsoft Yahei";
+}
+
+.main {
+	margin:100px auto;
+	width: 900px;
+	height:460px;
+	background: rgb(236,236,236) url(../img/404_bg.png) no-repeat;
+}
+
+.top{
+	padding:30px 0 0 350px;
+	color: #f00;
+	font-size: 28px;
+	clear: both;
+	height: 50px;
+}
+.middle {
+	padding:90px 0 0 400px;
+	color: #f00;
+	font-size: 26px;
+}
+
+.middle a{
+	color: #f00;
+}
+.bottom{
+	padding:80px 0 0 260px;
+	color: rgb(108,108,108);
+	font-size: 22px;
+	line-height: 36px;
+}
+.bottom a{
+	color: rgb(108,108,108);
+}
+

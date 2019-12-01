@@ -1,0 +1,130 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>@GlobalConfig.SystemSettings["store"]["name"]</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="icon" type="image/png" href="~/favicon.ico" />
+    <meta name="apple-mobile-web-app-title" content="@GlobalConfig.SystemSettings["store"]["name"]" />
+    <link rel="stylesheet" href="~/css/amazeui.min.css" />
+    <link rel="stylesheet" href="~/css/app.css" />
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_783249_t6knt0guzo.css">
+    @RenderSection("Styles", required: false)
+
+    <script src="~/js/jquery.min.js"></script>
+    <script src="//at.alicdn.com/t/font_783249_e5yrsf08rap.js"></script>
+    <script>
+        BASE_URL = '';
+        STORE_URL = '';
+    </script>
+</head>
+
+<body data-type="">
+    <div class="am-g tpl-g">
+        <!-- 头部 -->
+        <header class="tpl-header">
+            <!-- 右侧内容 -->
+            <div class="tpl-header-fluid">
+                <!-- 侧边切换 -->
+                <div class="am-fl tpl-header-button switch-button">
+                    <i class="iconfont icon-menufold"></i>
+                </div>
+                <!-- 刷新页面 -->
+                <div class="am-fl tpl-header-button refresh-button">
+                    <i class="iconfont icon-refresh"></i>
+                </div>
+                <!-- 其它功能-->
+                <div class="am-fr tpl-header-navbar">
+                    <ul>
+                        <!-- 欢迎语 -->
+                        <li class="am-text-sm tpl-header-navbar-welcome">
+                            <a href="/store.user/renew">
+                                欢迎你，<span>admin</span>
+                            </a>
+                        </li>
+                        <!-- 退出 -->
+                        <li class="am-text-sm">
+                            <a href="/passport/logout">
+                                <i class="iconfont icon-tuichu"></i> 退出
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+
+        <!-- 侧边导航栏 -->
+        <div class="left-sidebar">
+            @await Component.InvokeAsync("Navigation")
+        </div>
+
+        <!-- 内容区域 start -->
+        <div class="tpl-content-wrapper">
+            @RenderBody()
+        </div>
+        <!-- 内容区域 end -->
+
+    </div>
+    <script src="~/assets/layer/dist/layer.js"></script>
+    <script src="~/js/jquery.form.min.js"></script>
+    <script src="~/js/amazeui.min.js"></script>
+    <script src="~/js/webuploader.html5only.js"></script>
+    <script src="~/js/art-template.js"></script>
+    <script src="~/js/app.js"></script>
+    <script src="~/js/file.library.js"></script>
+    @RenderSection("Scripts", required: false)
+    <script>
+        $(function () {
+            /* 一级菜单 */
+            $(".sidebar-nav-link a").each(function () {
+                if ($($(this))[0].href == String(window.location).split('?')[0]
+                    || String(window.location).includes(".") && String(window.location).indexOf($($(this))[0].href.split('/')[3]) > 0
+                ) {
+                    $(this).addClass('active');
+                }
+            });
+
+            /* 有无子菜单 */
+            if ($(".left-sidebar-second").length == 0) {
+                $(".tpl-content-wrapper").addClass("no-sidebar-second");
+            }
+
+            /* 二级菜单 */
+            $(".sidebar-second-item a").each(function () {
+                if ($($(this))[0].href == String(window.location).split('?')[0]
+                    || String(window.location).includes(".") && String(window.location).split('/').slice(0, 4).join('/') == $($(this))[0].href.split('/').slice(0, 4).join('/')
+                ) {
+                    $(this).addClass('active');
+
+                    var index = $(this).attr("parent");
+                    $(".sidebar-nav-link a").each(function () {
+                        if ($(this).attr("index") == index) {
+                            $(this).addClass('active');
+                        }
+                    });
+
+                }
+            });
+
+            /* 三级菜单 */
+            $(".sidebar-third-nav-sub li a").each(function () {
+                if ($($(this))[0].href == String(window.location).split('?')[0]) {
+                    $(this).addClass('active');
+
+                    var index = $(this).attr("parent");
+                    $(".sidebar-nav-link a").each(function () {
+                        if ($(this).attr("index") == index) {
+                            $(this).addClass('active');
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,65 @@
+﻿@model List<MenuDto>
+<!-- 一级菜单 -->
+<ul class="sidebar-nav">
+    <li class="sidebar-nav-heading">@GlobalConfig.SystemSettings["store"]["name"]</li>
+    @if (Model != null && Model.Any())
+    {
+        foreach (var menu in Model)
+        {
+            <li class="sidebar-nav-link">
+                <a href="@(string.IsNullOrEmpty(menu.index)?"javascript:void(0);":menu.index)" class="" index="@menu.index">
+                    @if (menu.is_svg)
+                    {
+                        <svg class="icon sidebar-nav-link-logo" aria-hidden="true">
+                            <use xlink:href="#@(menu.icon)"></use>
+                        </svg>
+                    }
+                    else
+                    {
+                        <i class="iconfont sidebar-nav-link-logo @menu.icon" style="@(!string.IsNullOrEmpty(menu.color)?$"color:{menu.color}":"")"></i>
+                    }
+                    @menu.name
+                </a>
+            </li>
+        }
+    }
+</ul>
+
+<!-- 子级菜单 -->
+@if (Model != null && ViewBag.SecondSidebarIndex != null)
+{
+    var menu = Model[ViewBag.SecondSidebarIndex] as MenuDto;
+    if (menu?.submenu != null && menu.submenu.Length > 0)
+    {
+        <!-- 二级菜单 -->
+        <ul class="left-sidebar-second">
+            <li class="sidebar-second-title">@menu.name</li>
+            @foreach (var submenu in menu.submenu)
+            {
+                <li class="sidebar-second-item">
+                    @if (submenu.submenu != null && submenu.submenu.Length > 0)
+                    {
+                        <!-- 三级菜单-->
+                        <div class="sidebar-third-item">
+                            <a href="javascript:void(0);" class="sidebar-nav-sub-title @(submenu.active?"active":"")">
+                                <i class="iconfont icon-caret"></i> @submenu.name
+                            </a>
+                            <ul class="sidebar-third-nav-sub">
+                                @foreach (var subsubmenu in submenu.submenu)
+                                {
+                                    <li>
+                                        <a href="@subsubmenu.index" class="" parent="@menu.index"> @subsubmenu.name </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                    else
+                    {
+                        <a href="@submenu.index" class="" parent="@menu.index"> @submenu.name  </a>
+                    }
+                </li>
+            }
+        </ul>
+    }
+}

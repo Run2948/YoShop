@@ -1,0 +1,27 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width" />
+    <title>@Model</title>
+    <link href="~/css/404.css" rel="stylesheet" />
+</head>
+<body>
+<div class="main">
+    <div class="top">
+        抱歉, @(Model)! <a href="javascript:;" onclick="javascript:history.back(-1);">请返回</a>
+    </div>	
+    @*<div class="bottom">
+        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>我有故事，你想听吗？
+        <br><br><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> » <a href="javascript:;">想</a>
+        <br><br><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> » <a href="javascript:;">不想</a>
+    </div>*@
+</div>
+</body>
+</html>
