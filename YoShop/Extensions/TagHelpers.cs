@@ -32,7 +32,7 @@ namespace YoShop.Extensions
         /// 总记录数
         /// </summary>
         [HtmlAttributeName("total-count")]
-        public int TotalCount { get; set; } = 0;
+        public long TotalCount { get; set; } = 0;
         /// <summary>
         /// 每页大小
         /// </summary>

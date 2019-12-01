@@ -21,7 +21,7 @@ namespace YoShop.Models
         public uint GoodsSort { get; set; }
 
         [JsonProperty, Column(Name = "goods_status")]
-        public GoodsStatus GoodsStatus { get; set; }
+        public byte GoodsStatus { get; set; }
 
         [JsonProperty, Column(Name = "is_delete")]
         public byte IsDelete { get; set; }
@@ -33,7 +33,7 @@ namespace YoShop.Models
         public uint SalesInitial { get; set; }
 
         [JsonProperty, Column(Name = "spec_type")]
-        public SpecType SpecType { get; set; }
+        public byte SpecType { get; set; }
 
         [JsonProperty, Column(Name = "deduct_stock_type")]
         public byte DeductStockType { get; set; }

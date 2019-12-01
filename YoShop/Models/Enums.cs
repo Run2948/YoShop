@@ -32,13 +32,23 @@ namespace YoShop.Models
 
     public enum GoodsStatus
     {
-        [Description("上架")]
-        OnSale = 10,
-        [Description("下架")]
-        OffSale = 20,
+        上架 = 10,
+        下架 = 20,
+    }
+
+    public enum Gender
+    {
+        未知 = 0,
+        男 = 1,
+        女 = 2
     }
 
     public enum SpecType
+    {
+
+    }
+
+    public enum DeductStockType
     {
 
     }

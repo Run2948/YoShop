@@ -14,13 +14,13 @@ namespace YoShop.Models
         [JsonProperty, Column(Name = "open_id")]
         public string OpenId { get; set; }
 
-        [JsonProperty, Column(Name = "nickName")]
+        [JsonProperty, Column(Name = "nick_name")]
         public string NickName { get; set; }
 
         [JsonProperty, Column(Name = "gender")]
         public byte Gender { get; set; }
 
-        [JsonProperty, Column(Name = "avatarUrl")]
+        [JsonProperty, Column(Name = "avatar_url")]
         public string AvatarUrl { get; set; }
 
         [JsonProperty, Column(Name = "country", DbType = "varchar(50)")]
@@ -34,6 +34,7 @@ namespace YoShop.Models
 
         [JsonProperty, Column(Name = "address_id", DbType = "int(11) unsigned")]
         public uint AddressId { get; set; }
+
         [Navigate("AddressId")]
         public virtual UserAddress UserAddress { get; set; }
     }

@@ -30,6 +30,14 @@ namespace YoShop.Extensions.Common
         public static T Mapper<T>(this object source) where T : class => AutoMapper.Mapper.Map<T>(source);
 
         /// <summary>
+        /// Enum 映射
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static T ToEnum<T>(this object source) where T : Enum => (T)Enum.ToObject(typeof(T),source);
+
+        /// <summary>
         /// 网站启动时间
         /// </summary>
         public static DateTime StartupTime { get; set; } = DateTime.Now;
