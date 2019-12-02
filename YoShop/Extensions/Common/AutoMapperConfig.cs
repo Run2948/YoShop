@@ -24,6 +24,7 @@ namespace YoShop.Extensions.Common
                 m.CreateMap<CategoryDto, Category>()
                     .ForMember(dst => dst.CreateTime, opt => { opt.MapFrom(src => src.CreateTime.ConvertToTimeStamp()); })
                     .ForMember(dst => dst.UpdateTime, opt => { opt.MapFrom(src => src.UpdateTime.ConvertToTimeStamp()); });
+
                 m.CreateMap<User, UserDto>()
                 .ForMember(dst => dst.Gender, opt => { opt.MapFrom(src => src.Gender.ToEnum<Gender>()); })
                 .ForMember(dst => dst.CreateTime, opt => { opt.MapFrom(src => src.CreateTime.ConvertToDateTime()); })
@@ -33,6 +34,11 @@ namespace YoShop.Extensions.Common
                     .ForMember(dst => dst.Method, opt => { opt.MapFrom(src => src.Method.ToEnum<DeliveryMethod>()); })
                     .ForMember(dst => dst.CreateTime, opt => { opt.MapFrom(src => src.CreateTime.ConvertToDateTime()); })
                     .ForMember(dst => dst.UpdateTime, opt => { opt.MapFrom(src => src.UpdateTime.ConvertToDateTime()); });
+
+                m.CreateMap<DeliveryDto, Delivery>()
+                    .ForMember(dst => dst.Method, opt => { opt.MapFrom(src => src.Method.ToByte()); })
+                    .ForMember(dst => dst.CreateTime, opt => { opt.MapFrom(src => src.CreateTime.ConvertToTimeStamp()); })
+                    .ForMember(dst => dst.UpdateTime, opt => { opt.MapFrom(src => src.UpdateTime.ConvertToTimeStamp()); });
 
                 m.CreateMap<Goods, GoodsDto>()
                     .ForMember(dst => dst.CreateTime, opt => { opt.MapFrom(src => src.CreateTime.ConvertToDateTime()); })

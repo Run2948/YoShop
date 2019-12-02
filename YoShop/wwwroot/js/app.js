@@ -542,7 +542,7 @@ $(function () {
                     , $citys = $this.parent().next()
                     , $cityInputChecked = $citys.find('input.city:checked')
                     , cityData = []
-                    , cityTotal = Object.keys(_this.datas[province.id].city).length;
+                    , cityTotal = Object.keys(_this.datas[index].city).length;
                 // 遍历城市
                 if (cityTotal !== $cityInputChecked.length) {
                     $cityInputChecked.each(function (index, item) {

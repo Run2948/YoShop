@@ -40,10 +40,9 @@ namespace YoShop.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet, Route("/setting.delivery/add")]
-        public async Task<IActionResult> Add()
+        public IActionResult Add()
         {
-            await _fsql.Select<Region>().ToListAsync();
-            return View();
+            return View(new DeliveryDto());
         }
 
         /// <summary>
@@ -52,9 +51,21 @@ namespace YoShop.Controllers
         /// <param name="viewModel"></param>
         /// <returns></returns>
         [HttpPost, Route("/setting.delivery/add"), ValidateAntiForgeryToken]
-        public async Task<IActionResult> Add(DeliveryDto viewModel)
+        public async Task<IActionResult> Add(DeliveryWithRuleDto viewModel)
         {
-            return Yes("保存成功");
+            viewModel.WxappId = GetSellerSession().WxappId;
+            viewModel.CreateTime = DateTime.Now;
+            viewModel.UpdateTime = DateTime.Now;
+            try
+            {
+                //await _fsql.Insert<Delivery>().AppendData(viewModel.Mapper<Delivery>()).ExecuteAffrowsAsync();
+            }
+            catch (Exception e)
+            {
+                LogManager.Error(GetType(), e);
+                return No(e.Message);
+            }
+            return YesRedirect("保存成功！", "/setting.delivery/index");
         }
 
         /// <summary>

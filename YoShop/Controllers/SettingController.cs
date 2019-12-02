@@ -169,7 +169,7 @@ namespace YoShop.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost, Route("/setting/smstest"), ValidateAntiForgeryToken]
-        public async Task<IActionResult> SmsTest(string AccessKeyId, string AccessKeySecret, string sign, string msg_type, string template_code, string accept_phone)
+        public IActionResult SmsTest(string AccessKeyId, string AccessKeySecret, string sign, string msg_type, string template_code, string accept_phone)
         {
             if (string.IsNullOrEmpty(AccessKeyId))
                 return No("请填写 AccessKeyId");
@@ -248,7 +248,7 @@ namespace YoShop.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet, Route("/setting.cache/clear")]
-        public async Task<IActionResult> CacheClear()
+        public IActionResult CacheClear()
         {
             return View();
         }
@@ -258,7 +258,7 @@ namespace YoShop.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet, Route("/setting.science/index")]
-        public async Task<IActionResult> ScienceIndex()
+        public IActionResult ScienceIndex()
         {
             return View();
         }
