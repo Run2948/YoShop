@@ -37,4 +37,13 @@ namespace YoShop.Models.Views
 
         }
     }
+
+    public class DeliveryListViewModel : SellerBaseViewModel<DeliveryDto>
+    {
+        public DeliveryListViewModel(List<DeliveryDto> list, long total)
+            : base(list, total)
+        {
+
+        }
+    }
 }

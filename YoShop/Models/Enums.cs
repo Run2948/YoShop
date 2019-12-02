@@ -73,5 +73,9 @@ namespace YoShop.Models
 
     }
 
-
+    public enum DeliveryMethod
+    {
+        按件数 = 10,
+        按重量 = 20,
+    }
 }

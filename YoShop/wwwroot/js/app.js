@@ -437,7 +437,6 @@ $(function () {
                                                 small.prop('checked', false);
                                                 $placeTooltips.find('.ratio').html('');
                                             }
-
                                         }
                                     })
                                 )

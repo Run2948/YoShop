@@ -50,7 +50,7 @@ namespace YoShop.Controllers
         /// </summary>
         /// <param name="viewModel"></param>
         /// <returns></returns>
-        [HttpPost, Route("/goods.category/add")]
+        [HttpPost, Route("/goods.category/add"), ValidateAntiForgeryToken]
         public async Task<IActionResult> Add(CategoryDto viewModel)
         {
             viewModel.WxappId = GetSellerSession().WxappId;
@@ -91,7 +91,7 @@ namespace YoShop.Controllers
         /// <param name="viewModel"></param>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpPost, Route("/goods.category/edit/categoryId/{id}")]
+        [HttpPost, Route("/goods.category/edit/categoryId/{id}"), ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(CategoryDto viewModel, uint id)
         {
             var model = await _fsql.Select<Category>().Where(c => c.CategoryId == id).ToOneAsync();

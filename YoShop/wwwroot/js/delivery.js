@@ -140,7 +140,7 @@
          * 切换计费方式
          */
         clickMethodEvent: function () {
-            $('input:radio[name="delivery[method]"]').change(function (e) {
+            $('input:radio[name="Method"]').change(function (e) {
                 var $first = $('.first')
                     , $additional = $('.additional');
                 if (e.currentTarget.value === '20')
@@ -148,8 +148,7 @@
                 else
                     $first.text('首件 (个)') && $additional.text('续件 (个)');
             });
-        },
-
+        }
     };
 
     window.Delivery = Delivery;

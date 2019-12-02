@@ -10,8 +10,8 @@ namespace YoShop.Models
     [JsonObject(MemberSerialization.OptIn), Table(Name = "region")]
     public partial class Region
     {
-        [JsonProperty, Column(Name = "id", IsIdentity = true, IsPrimary = true)]
-        public int Id { get; set; }
+        [JsonProperty, Column(Name = "id", DbType = "int(11) unsigned", IsIdentity = true, IsPrimary = true)]
+        public uint Id { get; set; }
 
         [JsonProperty, Column(Name = "code", DbType = "varchar(100)")]
         public string Code { get; set; }
@@ -23,7 +23,7 @@ namespace YoShop.Models
         public string Lat { get; set; }
 
         [JsonProperty, Column(Name = "level", DbType = "tinyint(4) unsigned")]
-        public byte? Level { get; set; }
+        public byte Level { get; set; }
 
         [JsonProperty, Column(Name = "lng", DbType = "varchar(100)")]
         public string Lng { get; set; }
@@ -34,8 +34,8 @@ namespace YoShop.Models
         [JsonProperty, Column(Name = "name", DbType = "varchar(100)")]
         public string Name { get; set; }
 
-        [JsonProperty, Column(Name = "pid")]
-        public int? Pid { get; set; }
+        [JsonProperty, Column(Name = "pid", DbType = "int(11) unsigned")]
+        public uint Pid { get; set; }
 
         [JsonProperty, Column(Name = "pinyin", DbType = "varchar(100)")]
         public string Pinyin { get; set; }

@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Rewrite;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using YoShop.Extensions.Common;
 using YoShop.Models;
 
@@ -178,6 +180,64 @@ namespace YoShop.Extensions
                 var newUrl = new StringBuilder().Append("https://").Append(newHost).Append(req.PathBase).Append(req.Path).Append(req.QueryString);
                 context.HttpContext.Response.Redirect(newUrl.ToString());
                 context.Result = RuleResult.EndResponse;
+            }
+        }
+    }
+
+        /// <summary>
+    /// Json序列化帮助类
+    /// </summary>
+    public static class JsonExtensions
+    {
+        /// <summary>
+        /// 序列化
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="json"></param>
+        /// <param name="missMemeberIgnore">忽略丢失的属性</param>
+        /// <param name="referenceLoopIgnore">忽略循环引用</param>
+        /// <param name="propertyCamelCase">驼峰式命名：针对C#与Js命名方式不一致</param>
+        /// <returns></returns>
+        public static T JsonToObject<T>(this string json, bool missMemeberIgnore = true, bool referenceLoopIgnore = true, bool propertyCamelCase = true)
+        {
+            var setting = new JsonSerializerSettings();
+            if (missMemeberIgnore)
+                setting.MissingMemberHandling = MissingMemberHandling.Ignore;
+            if (referenceLoopIgnore)
+                setting.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            if (propertyCamelCase)
+                setting.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            try
+            {
+                return JsonConvert.DeserializeObject<T>(json);
+            }
+            catch (Exception)
+            {
+                return default;
+            }
+        }
+
+        /// <summary>
+        /// 反序列化
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="nullValueIgnore">忽略空值类型</param>
+        /// <param name="propertyCamelCase">驼峰式命名：针对C#与Js命名方式不一致</param>
+        /// <returns></returns>
+        public static string ObjectToJson(this object obj, bool nullValueIgnore = true, bool propertyCamelCase = true)
+        {
+            var setting = new JsonSerializerSettings();
+            if (nullValueIgnore)
+                setting.NullValueHandling = NullValueHandling.Ignore;
+            if (propertyCamelCase)
+                setting.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            try
+            {
+                return JsonConvert.SerializeObject(obj, setting);
+            }
+            catch
+            {
+                return null;
             }
         }
     }
