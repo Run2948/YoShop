@@ -46,4 +46,13 @@ namespace YoShop.Models.Views
 
         }
     }
+
+    public class GoodsListViewModel : SellerBaseViewModel<GoodsDto>
+    {
+        public GoodsListViewModel(List<GoodsDto> list, long total)
+            : base(list, total)
+        {
+
+        }
+    }
 }

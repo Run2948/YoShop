@@ -79,7 +79,7 @@ namespace YoShop.Controllers
         public async Task<IActionResult> Edit(uint id)
         {
             var delivery = await _fsql.Select<Delivery>().Where(l => l.DeliveryId == id).ToOneAsync();
-            var ruleWithRegions = await _fsql.Select<DeliveryRule>().Where(l => l.DeliveryId == id).ToListAsync(l => new RuleWithRegionDto()
+            var ruleWithRegions = await _fsql.Select<DeliveryRule>().Where(l => l.DeliveryId == id).ToListAsync(l => new DeliveryRuleWithRegionDto()
             {
                 Region = l.Region,
                 First = l.First,

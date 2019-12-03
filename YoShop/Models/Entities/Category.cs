@@ -19,7 +19,7 @@ namespace YoShop.Models
         [JsonProperty, FreeSql.DataAnnotations.Column(Name = "image_id", DbType = "int(11) unsigned")]
         public uint ImageId { get; set; }
 
-        [Navigate("ImageId")]
+        [Navigate(nameof(ImageId))]
         public virtual UploadFile UploadFile { get; set; }
 
         [JsonProperty, FreeSql.DataAnnotations.Column(Name = "sort", DbType = "int(11) unsigned")]

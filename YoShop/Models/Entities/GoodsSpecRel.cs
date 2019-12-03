@@ -17,7 +17,13 @@ namespace YoShop.Models
         [JsonProperty, Column(Name = "spec_id", DbType = "int(11) unsigned")]
         public uint SpecId { get; set; }
 
+        [Navigate(nameof(SpecId))]
+        public virtual Spec Spec { get; set; }
+
         [JsonProperty, Column(Name = "spec_value_id", DbType = "int(11) unsigned")]
         public uint SpecValueId { get; set; }
+
+        [Navigate(nameof(SpecValueId))]
+        public virtual SpecValue SpecValue { get; set; }
     }
 }

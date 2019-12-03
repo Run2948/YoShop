@@ -45,12 +45,14 @@ namespace YoShop.Models
 
     public enum SpecType
     {
-
+        单规格 = 10,
+        多规格 = 20
     }
 
     public enum DeductStockType
     {
-
+        下单减库存 = 10,
+        付款减库存 = 20
     }
 
     public enum OrderStatus

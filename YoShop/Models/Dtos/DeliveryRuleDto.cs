@@ -21,4 +21,20 @@ namespace YoShop.Models
 
         public uint DeliveryId { get; set; }
     }
+
+    public class DeliveryRuleWithRegionDto
+    {
+        public string Content { get; set; }
+
+        public string Region { get; set; }
+
+        public double First { get; set; }
+
+        public decimal FirstFee { get; set; }
+
+        public double Additional { get; set; }
+
+        public decimal AdditionalFee { get; set; }
+    }
+
 }

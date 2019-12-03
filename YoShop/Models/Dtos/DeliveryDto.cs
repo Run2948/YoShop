@@ -62,18 +62,10 @@ namespace YoShop.Models
         }
     }
 
-    public class RuleWithRegionDto
+    public class DeliverySelectDto
     {
-        public string Content { get; set; }
+        public uint DeliveryId { get; set; }
 
-        public string Region { get; set; }
-
-        public double First { get; set; }
-
-        public decimal FirstFee { get; set; }
-
-        public double Additional { get; set; }
-
-        public decimal AdditionalFee { get; set; }
+        public string Name { get; set; }
     }
 }

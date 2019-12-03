@@ -8,6 +8,7 @@ namespace YoShop.Models
     public class GoodsDto : WxappDto
     {
         public uint GoodsId { get; set; }
+        public virtual List<GoodsImage> GoodsImages { get; set; }
 
         public string GoodsName { get; set; }
 
@@ -25,7 +26,7 @@ namespace YoShop.Models
 
         public SpecType SpecType { get; set; }
 
-        public byte DeductStockType { get; set; }
+        public DeductStockType DeductStockType { get; set; }
 
         public uint CategoryId { get; set; }
         public Category Category { get; set; }

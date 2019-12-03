@@ -35,7 +35,7 @@ namespace YoShop.Models
         [JsonProperty, Column(Name = "address_id", DbType = "int(11) unsigned")]
         public uint AddressId { get; set; }
 
-        [Navigate("AddressId")]
+        [Navigate(nameof(AddressId))]
         public virtual UserAddress UserAddress { get; set; }
     }
 }

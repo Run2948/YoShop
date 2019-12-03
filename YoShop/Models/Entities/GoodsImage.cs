@@ -14,9 +14,10 @@ namespace YoShop.Models
         [JsonProperty, Column(Name = "goods_id", DbType = "int(11) unsigned")]
         public uint GoodsId { get; set; }
 
-        [JsonProperty, Column(Name = "image_id")]
-        public int ImageId { get; set; }
+        [JsonProperty, Column(Name = "image_id", DbType = "int(11) unsigned")]
+        public uint ImageId { get; set; }
 
-
+        [Navigate(nameof(ImageId))]
+        public virtual UploadFile UploadFile { get; set; }
     }
 }

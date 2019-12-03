@@ -40,8 +40,7 @@ namespace YoShop.Controllers
         [HttpGet, Route("/goods.category/add")]
         public async Task<IActionResult> Add()
         {
-            var list = await _fsql.Select<Category>().Where(l => l.ParentId == 0).ToListAsync();
-            ViewData["first"] = list.Mapper<List<CategoryDto>>();
+            ViewData["first"] = await _fsql.Select<Category>().Where(l => l.ParentId == 0).ToListAsync<CategorySelectDto>();
             return View(new CategoryDto());
         }
 
@@ -80,8 +79,7 @@ namespace YoShop.Controllers
         {
             var model = await _fsql.Select<Category>().Where(c => c.CategoryId == id).Include(c => c.UploadFile).ToOneAsync();
             if (model == null) return NoOrDeleted();
-            var list = await _fsql.Select<Category>().Where(l => l.ParentId == 0).ToListAsync();
-            ViewData["first"] = list.Mapper<List<CategoryDto>>();
+            ViewData["first"] = await _fsql.Select<Category>().Where(l => l.ParentId == 0).ToListAsync<CategorySelectDto>();
             return View(model.Mapper<CategoryDto>());
         }
 

@@ -217,7 +217,7 @@
                         data.spec_list[index].form = $.extend({}, data.spec_list[index].form, formData);
                     });
                     // 渲染商品规格table
-                    _this.renderTabelHtml();
+                    _this.renderTableHtml();
                 }
             });
         },
@@ -229,13 +229,13 @@
             // 渲染商品规格元素
             this.$specAttr.html(template('tpl_spec_attr', data));
             // 渲染商品规格table
-            this.renderTabelHtml();
+            this.renderTableHtml();
         },
 
         /**
          * 渲染表格html
          */
-        renderTabelHtml: function () {
+        renderTableHtml: function () {
             var $specTabel = this.$container.find('.spec-sku-tabel')
                 , $goodsSku = $specTabel.parent();
             // 商品规格为空：隐藏sku容器

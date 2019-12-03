@@ -29,10 +29,10 @@ namespace YoShop.Models
         [JsonProperty, Column(Name = "group_id", DbType = "int(11) unsigned")]
         public uint GroupId { get; set; }
 
-        [Navigate("GroupId")]
+        [Navigate(nameof(GroupId))]
         public virtual UploadGroup UploadGroup { get; set; }
 
-        [JsonProperty, Column(Name = "is_delete")]
+        [JsonProperty, Column(Name = "is_delete", DbType = "tinyint(1) unsigned")]
         public byte IsDelete { get; set; }
 
         [JsonProperty, Column(Name = "storage", DbType = "varchar(20)")]
