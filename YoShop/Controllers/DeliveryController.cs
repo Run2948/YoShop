@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Masuit.Tools.Logging;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
+using YoShop.Extensions;
 using YoShop.Extensions.Common;
 using YoShop.Models;
 using YoShop.Models.Views;
@@ -58,7 +59,9 @@ namespace YoShop.Controllers
             viewModel.UpdateTime = DateTime.Now;
             try
             {
-                //await _fsql.Insert<Delivery>().AppendData(viewModel.Mapper<Delivery>()).ExecuteAffrowsAsync();
+                var deliveryId = await _fsql.Insert<Delivery>().AppendData(viewModel.Mapper<Delivery>()).ExecuteIdentityAsync();
+                var deliveryRules = viewModel.BuildDeliveryRuleDto((uint)deliveryId);
+                await _fsql.Insert<DeliveryRule>().AppendData(deliveryRules.Mapper<List<DeliveryRule>>()).ExecuteAffrowsAsync();
             }
             catch (Exception e)
             {
@@ -75,18 +78,72 @@ namespace YoShop.Controllers
         [HttpGet, Route("/setting.delivery/edit/deliveryId/{id}")]
         public async Task<IActionResult> Edit(uint id)
         {
-            return View();
+            var delivery = await _fsql.Select<Delivery>().Where(l => l.DeliveryId == id).ToOneAsync();
+            var ruleWithRegions = await _fsql.Select<DeliveryRule>().Where(l => l.DeliveryId == id).ToListAsync(l => new RuleWithRegionDto()
+            {
+                Region = l.Region,
+                First = l.First,
+                FirstFee = l.FirstFee,
+                Additional = l.Additional,
+                AdditionalFee = l.AdditionalFee
+            });
+            foreach (var ruleWithRegion in ruleWithRegions)
+            {
+                if (!string.IsNullOrEmpty(ruleWithRegion.Region))
+                {
+                    var regionIds = ruleWithRegion.Region.Split(',').Select(l => Convert.ToUInt32(l)).ToList();
+                    if (regionIds.Any())
+                    {
+                        var parentId = await _fsql.Select<Region>().Where(l => l.Id == regionIds[0]).ToOneAsync(l => l.Pid);
+                        var province = await _fsql.Select<Region>().Where(l => l.Id == parentId).ToOneAsync(l => l.Name);
+                        var cities = await _fsql.Select<Region>().Where(l => regionIds.Contains(l.Id)).ToListAsync(l => l.Name);
+                        ruleWithRegion.Content = $"{province} (<span class=\"am-link-muted\">{string.Join("、", cities)}</span>)";
+                    }
+                }
+            }
+            ViewData["rules"] = ruleWithRegions;
+            return View(delivery.Mapper<DeliveryDto>());
         }
 
         /// <summary>
         /// 更新配送设置
         /// </summary>
-        /// <param name="str"></param>
+        /// <param name="viewModel"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
         [HttpPost, Route("/setting.delivery/edit/deliveryId/{id}"), ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string str, uint id)
+        public async Task<IActionResult> Edit(DeliveryWithRuleDto viewModel, uint id)
         {
-            return Yes("更新成功");
+            try
+            {
+                var delivery = await _fsql.Select<Delivery>().Where(l => l.DeliveryId == id).ToOneAsync();
+                if (delivery == null) return No("该记录不存在或已被删除！");
+
+                viewModel.DeliveryId = delivery.DeliveryId;
+                viewModel.WxappId = delivery.WxappId;
+                viewModel.CreateTime = DateTime.Now;
+                viewModel.UpdateTime = DateTime.Now;
+
+                delivery.Name = viewModel.Name;
+                delivery.Method = viewModel.Method.ToByte();
+                delivery.Sort = viewModel.Sort;
+                delivery.CreateTime = DateTimeExtensions.GetCurrentTimeStamp();
+
+                var count = await _fsql.Update<Delivery>().SetSource(delivery).ExecuteAffrowsAsync();
+                if (count > 0)
+                {
+                    var deliveryRules = viewModel.BuildDeliveryRuleDto(delivery.DeliveryId);
+                    count = await _fsql.Delete<DeliveryRule>().Where(l => l.DeliveryId == delivery.DeliveryId).ExecuteAffrowsAsync();
+                    if (count > 0)
+                        await _fsql.Insert<DeliveryRule>().AppendData(deliveryRules.Mapper<List<DeliveryRule>>()).ExecuteAffrowsAsync();
+                }
+            }
+            catch (Exception e)
+            {
+                LogManager.Error(GetType(), e);
+                return No(e.Message);
+            }
+            return YesRedirect("更新成功！", "/setting.delivery/index");
         }
 
         /// <summary>
@@ -99,7 +156,9 @@ namespace YoShop.Controllers
         {
             try
             {
-                await _fsql.Delete<Delivery>().Where(d => d.DeliveryId == deliveryId).ExecuteAffrowsAsync();
+                long count = await _fsql.Delete<Delivery>().Where(d => d.DeliveryId == deliveryId).ExecuteAffrowsAsync();
+                if (count > 0)
+                    await _fsql.Delete<DeliveryRule>().Where(d => d.DeliveryId == deliveryId).ExecuteAffrowsAsync();
             }
             catch (Exception e)
             {

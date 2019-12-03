@@ -40,6 +40,16 @@ namespace YoShop.Extensions.Common
                     .ForMember(dst => dst.CreateTime, opt => { opt.MapFrom(src => src.CreateTime.ConvertToTimeStamp()); })
                     .ForMember(dst => dst.UpdateTime, opt => { opt.MapFrom(src => src.UpdateTime.ConvertToTimeStamp()); });
 
+                m.CreateMap<DeliveryWithRuleDto, DeliveryDto>();
+
+                m.CreateMap<DeliveryRule, DeliveryRuleDto>()
+                    .ForMember(dst => dst.CreateTime, opt => { opt.MapFrom(src => src.CreateTime.ConvertToDateTime()); })
+                    .ForMember(dst => dst.UpdateTime, opt => { opt.MapFrom(src => src.UpdateTime.ConvertToDateTime()); });
+
+                m.CreateMap<DeliveryRuleDto, DeliveryRule>()
+                    .ForMember(dst => dst.CreateTime, opt => { opt.MapFrom(src => src.CreateTime.ConvertToTimeStamp()); })
+                    .ForMember(dst => dst.UpdateTime, opt => { opt.MapFrom(src => src.UpdateTime.ConvertToTimeStamp()); });
+
                 m.CreateMap<Goods, GoodsDto>()
                     .ForMember(dst => dst.CreateTime, opt => { opt.MapFrom(src => src.CreateTime.ConvertToDateTime()); })
                     .ForMember(dst => dst.UpdateTime, opt => { opt.MapFrom(src => src.UpdateTime.ConvertToDateTime()); });

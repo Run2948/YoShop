@@ -28,5 +28,52 @@ namespace YoShop.Models
         public double[] Additional { get; set; }
 
         public decimal[] AdditionalFee { get; set; }
+
+        public List<DeliveryRuleDto> BuildDeliveryRuleDto(uint deliveryId)
+        {
+            return Region.Select((t, i) => new DeliveryRuleDto()
+            {
+                Region = t,
+                First = First[i],
+                FirstFee = FirstFee[i],
+                Additional = Additional[i],
+                AdditionalFee = AdditionalFee[i],
+                CreateTime = CreateTime,
+                UpdateTime = UpdateTime,
+                WxappId = WxappId,
+                DeliveryId = deliveryId
+            }).ToList();
+        }
+
+        public List<DeliveryRuleDto> BuildDeliveryRuleDto()
+        {
+            return Region.Select((t, i) => new DeliveryRuleDto()
+            {
+                Region = t,
+                First = First[i],
+                FirstFee = FirstFee[i],
+                Additional = Additional[i],
+                AdditionalFee = AdditionalFee[i],
+                CreateTime = CreateTime,
+                UpdateTime = UpdateTime,
+                WxappId = WxappId,
+                DeliveryId = DeliveryId
+            }).ToList();
+        }
+    }
+
+    public class RuleWithRegionDto
+    {
+        public string Content { get; set; }
+
+        public string Region { get; set; }
+
+        public double First { get; set; }
+
+        public decimal FirstFee { get; set; }
+
+        public double Additional { get; set; }
+
+        public decimal AdditionalFee { get; set; }
     }
 }

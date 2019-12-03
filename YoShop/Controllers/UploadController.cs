@@ -107,8 +107,8 @@ namespace YoShop.Controllers
             {
                 if (fileIds.Length > 0)
                 {
-                   await _fsql.Update<UploadFile>().Set(l => l.GroupId == group_id).Where(l => fileIds.Contains(l.FileId))
-                        .ExecuteAffrowsAsync();
+                    await _fsql.Update<UploadFile>().Set(l => l.GroupId == group_id).Where(l => fileIds.Contains(l.FileId))
+                         .ExecuteAffrowsAsync();
                 }
             }
             catch (Exception e)
@@ -130,8 +130,8 @@ namespace YoShop.Controllers
             {
                 if (fileIds.Length > 0)
                 {
-                   await _fsql.Update<UploadFile>().Set(l => l.IsDelete == 0).Where(l => fileIds.Contains(l.FileId))
-                        .ExecuteAffrowsAsync();
+                    await _fsql.Update<UploadFile>().Set(l => l.IsDelete == 0).Where(l => fileIds.Contains(l.FileId))
+                         .ExecuteAffrowsAsync();
                 }
             }
             catch (Exception e)
@@ -220,11 +220,10 @@ namespace YoShop.Controllers
                 CreateTime = timestamp,
                 UpdateTime = timestamp
             };
-            uint group_id = 0;
+            long groupId = 0;
             try
             {
-                await _fsql.Insert<UploadGroup>().AppendData(model).ExecuteAffrowsAsync();
-                group_id = await _fsql.Select<UploadGroup>().MaxAsync(l => l.GroupId);
+                groupId = await _fsql.Insert<UploadGroup>().AppendData(model).ExecuteIdentityAsync();
             }
             catch (Exception e)
             {
@@ -232,7 +231,7 @@ namespace YoShop.Controllers
                 return No(e.Message);
             }
 
-            return YesResult("添加成功！", new { groupId = group_id, groupName = request.group_name });
+            return YesResult("添加成功！", new { groupId, groupName = request.group_name });
         }
 
         /// <summary>
