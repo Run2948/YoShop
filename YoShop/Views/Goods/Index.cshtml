@@ -49,9 +49,12 @@
                                         <tr>
                                             <td class="am-text-middle">@item.GoodsId</td>
                                             <td class="am-text-middle">
-                                                <a href="@(item.GoodsImages[0]?.UploadFile?.FileUrl)" title="点击查看大图" target="_blank">
-                                                    <img src="@(item.GoodsImages[0]?.UploadFile?.FileUrl)" width="50" height="50" alt="商品图片">
-                                                </a>
+                                                @if (item.GoodsImages != null && item.GoodsImages.Any())
+                                                {
+                                                    <a href="@(item.GoodsImages[0]?.UploadFile?.FileUrl)" title="点击查看大图" target="_blank">
+                                                        <img src="@(item.GoodsImages[0]?.UploadFile?.FileUrl)" width="50" height="50" alt="商品图片">
+                                                    </a>
+                                                }
                                             </td>
                                             <td class="am-text-middle">
                                                 <p class="item-title">@item.GoodsName</p>
@@ -61,7 +64,7 @@
                                             <td class="am-text-middle">@item.GoodsSort</td>
                                             <td class="am-text-middle">
                                                 <span class="@(item.GoodsStatus == GoodsStatus.上架 ? "x-color-green": "x-color-red")">
-                                                    @(item.GoodsStatus == GoodsStatus.上架 ? "上架" : "下架")
+                                                    @(item.GoodsStatus)
                                                 </span>
                                             </td>
                                             <td class="am-text-middle">@item.CreateTime</td>

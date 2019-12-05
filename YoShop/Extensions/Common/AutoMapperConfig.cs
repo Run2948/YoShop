@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using YoShop.Models;
+using YoShop.Models.Requests;
 
 namespace YoShop.Extensions.Common
 {
@@ -40,7 +41,7 @@ namespace YoShop.Extensions.Common
                     .ForMember(dst => dst.CreateTime, opt => { opt.MapFrom(src => src.CreateTime.ConvertToTimeStamp()); })
                     .ForMember(dst => dst.UpdateTime, opt => { opt.MapFrom(src => src.UpdateTime.ConvertToTimeStamp()); });
 
-                m.CreateMap<DeliveryWithRuleDto, DeliveryDto>();
+                m.CreateMap<SellerDeliveryRequest, DeliveryDto>();
 
                 m.CreateMap<DeliveryRule, DeliveryRuleDto>()
                     .ForMember(dst => dst.CreateTime, opt => { opt.MapFrom(src => src.CreateTime.ConvertToDateTime()); })
@@ -63,6 +64,37 @@ namespace YoShop.Extensions.Common
                     .ForMember(dst => dst.DeductStockType, opt => { opt.MapFrom(src => src.GoodsStatus.ToByte()); })
                     .ForMember(dst => dst.CreateTime, opt => { opt.MapFrom(src => src.CreateTime.ConvertToTimeStamp()); })
                     .ForMember(dst => dst.UpdateTime, opt => { opt.MapFrom(src => src.UpdateTime.ConvertToTimeStamp()); });
+
+                m.CreateMap<SellerGoodsRequest, Goods>()
+                    .ForMember(dst => dst.GoodsStatus, opt => { opt.MapFrom(src => src.GoodsStatus.ToByte()); })
+                    .ForMember(dst => dst.SpecType, opt => { opt.MapFrom(src => src.SpecType.ToByte()); })
+                    .ForMember(dst => dst.DeductStockType, opt => { opt.MapFrom(src => src.GoodsStatus.ToByte()); })
+                    .ForMember(dst => dst.CreateTime, opt => { opt.MapFrom(src => src.CreateTime.ConvertToTimeStamp()); })
+                    .ForMember(dst => dst.UpdateTime, opt => { opt.MapFrom(src => src.UpdateTime.ConvertToTimeStamp()); });
+
+                m.CreateMap<Goods, SellerGoodsRequest>()
+                    .ForMember(dst => dst.GoodsStatus, opt => { opt.MapFrom(src => src.GoodsStatus.ToByte()); })
+                    .ForMember(dst => dst.SpecType, opt => { opt.MapFrom(src => src.SpecType.ToByte()); })
+                    .ForMember(dst => dst.DeductStockType, opt => { opt.MapFrom(src => src.GoodsStatus.ToByte()); })
+                    .ForMember(dst => dst.CreateTime, opt => { opt.MapFrom(src => src.CreateTime.ConvertToDateTime()); })
+                    .ForMember(dst => dst.UpdateTime, opt => { opt.MapFrom(src => src.UpdateTime.ConvertToDateTime()); });
+
+                m.CreateMap<GoodsSpec, GoodsSpecDto>()
+                    .ForMember(dst => dst.CreateTime, opt => { opt.MapFrom(src => src.CreateTime.ConvertToDateTime()); })
+                    .ForMember(dst => dst.UpdateTime, opt => { opt.MapFrom(src => src.UpdateTime.ConvertToDateTime()); });
+
+                m.CreateMap<GoodsSpecDto, GoodsSpec>()
+                    .ForMember(dst => dst.CreateTime, opt => { opt.MapFrom(src => src.CreateTime.ConvertToTimeStamp()); })
+                    .ForMember(dst => dst.UpdateTime, opt => { opt.MapFrom(src => src.UpdateTime.ConvertToTimeStamp()); });
+
+                m.CreateMap<GoodsSpecRel, GoodsSpecRelDto>()
+                    .ForMember(dst => dst.CreateTime, opt => { opt.MapFrom(src => src.CreateTime.ConvertToDateTime()); })
+                    .ForMember(dst => dst.UpdateTime, opt => { opt.MapFrom(src => src.UpdateTime.ConvertToDateTime()); });
+
+                m.CreateMap<GoodsSpecRelDto, GoodsSpecRel>()
+                    .ForMember(dst => dst.CreateTime, opt => { opt.MapFrom(src => src.CreateTime.ConvertToTimeStamp()); })
+                    .ForMember(dst => dst.UpdateTime, opt => { opt.MapFrom(src => src.UpdateTime.ConvertToTimeStamp()); });
+
             });
         }
     }

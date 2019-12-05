@@ -1,4 +1,4 @@
-﻿@model GoodsDto
+﻿@model SellerGoodsRequest
 @{
     ViewData["Title"] = "商品基本信息";
     ViewBag.SecondSidebarIndex = 1;
@@ -160,31 +160,31 @@
                                 <div class="am-form-group">
                                     <label class="am-u-sm-3 am-u-lg-2 am-form-label">商品编码 </label>
                                     <div class="am-u-sm-9 am-u-end">
-                                        <input type="text" class="tpl-form-input" name="goods[spec][goods_no]" value="">
+                                        <input type="text" class="tpl-form-input" asp-for="GoodsSpec.GoodsNo" value="">
                                     </div>
                                 </div>
                                 <div class="am-form-group">
                                     <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">商品价格 </label>
                                     <div class="am-u-sm-9 am-u-end">
-                                        <input type="number" class="tpl-form-input" name="goods[spec][goods_price]" required>
+                                        <input type="number" class="tpl-form-input" asp-for="GoodsSpec.GoodsPrice" required>
                                     </div>
                                 </div>
                                 <div class="am-form-group">
                                     <label class="am-u-sm-3 am-u-lg-2 am-form-label">商品划线价 </label>
                                     <div class="am-u-sm-9 am-u-end">
-                                        <input type="number" class="tpl-form-input" name="goods[spec][line_price]">
+                                        <input type="number" class="tpl-form-input" asp-for="GoodsSpec.LinePrice">
                                     </div>
                                 </div>
                                 <div class="am-form-group">
                                     <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">当前库存数量 </label>
                                     <div class="am-u-sm-9 am-u-end">
-                                        <input type="number" class="tpl-form-input" name="goods[spec][stock_num]" required>
+                                        <input type="number" class="tpl-form-input" asp-for="GoodsSpec.StockNum" required>
                                     </div>
                                 </div>
                                 <div class="am-form-group">
                                     <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">商品重量(Kg) </label>
                                     <div class="am-u-sm-9 am-u-end">
-                                        <input type="number" class="tpl-form-input" name="goods[spec][goods_weight]" required>
+                                        <input type="number" class="tpl-form-input" asp-for="GoodsSpec.GoodsWeight" required>
                                     </div>
                                 </div>
                             </div>
@@ -296,7 +296,7 @@
 
         // 选择图片
         $('.upload-file').selectImages({
-            name: 'Images[]'
+            name: 'ImageIds[]'
             , multiple: true
         });
 
@@ -334,9 +334,7 @@
             // form data
             buildData: function () {
                 return {
-                    goods: {
-                        spec_many: specMany.getData()
-                    }
+                    specMany: JSON.stringify(specMany.getData())
                 };
             },
             // 自定义验证

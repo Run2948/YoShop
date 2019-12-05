@@ -1,15 +1,15 @@
 ﻿<!-- 商品规格属性模板 -->
 <script id="tpl_spec_attr" type="text/template">
-    {{ each spec_attr }}
-    <div class="spec-group-item" data-index="{{ $index }}" data-group-id="{{ $value.group_id }}">
+    {{ each specAttr }}
+    <div class="spec-group-item" data-index="{{ $index }}" data-group-id="{{ $value.specId }}">
         <div class="spec-group-name">
-            <span>{{ $value.group_name }}</span>
+            <span>{{ $value.specName }}</span>
             <i class="spec-group-delete iconfont icon-shanchu1" title="点击删除"></i>
         </div>
         <div class="spec-list am-cf">
-            {{ each $value.spec_items item key }}
+            {{ each $value.specItems item key }}
             <div class="spec-item am-fl" data-item-index="{{ key }}">
-                <span>{{ item.spec_value }}</span>
+                <span>{{ item.specValueName }}</span>
                 <i class="spec-item-delete iconfont icon-shanchu1" title="点击删除"></i>
             </div>
             {{ /each }}
@@ -26,8 +26,8 @@
 <script id="tpl_spec_table" type="text/template">
     <tbody>
         <tr>
-            {{ each spec_attr }}
-            <th>{{ $value.group_name }}</th>
+            {{ each specAttr }}
+            <th>{{ $value.specName }}</th>
             {{ /each }}
             <th>商家编码</th>
             <th>销售价</th>
@@ -35,29 +35,29 @@
             <th>库存</th>
             <th>重量(kg)</th>
         </tr>
-        {{ each spec_list item }}
-        <tr data-index="{{ $index }}" data-sku-id="{{ item.spec_sku_id }}">
-            {{ each item.rows td itemKey }}
-            <td class="td-spec-value am-text-middle" rowspan="{{ td.rowspan }}">
-                {{ td.spec_value }}
+        {{ each specList item }}
+        <tr data-index="{{ $index }}" data-sku-id="{{ item.specSkuId }}">
+            {{ each item.goodsSpecRels td itemKey }}
+            <td class="td-spec-value am-text-middle" rowspan="{{ td.rowSpan }}">
+                {{ td.specValueName }}
             </td>
             {{ /each }}
             <td>
-                <input type="text" name="goods_no" value="{{ item.form.goods_no }}" class="ipt-goods-no am-field-valid">
+                <input type="text" name="goodsNo" value="{{ item.goodsSpec.goodsNo }}" class="ipt-goods-no am-field-valid">
             </td>
             <td>
-                <input type="number" name="goods_price" value="{{ item.form.goods_price }}" class="am-field-valid ipt-w80"
+                <input type="number" name="goodsPrice" value="{{ item.goodsSpec.goodsPrice }}" class="am-field-valid ipt-w80"
                        required>
             </td>
             <td>
-                <input type="number" name="line_price" value="{{ item.form.line_price }}" class="am-field-valid ipt-w80">
+                <input type="number" name="linePrice" value="{{ item.goodsSpec.linePrice }}" class="am-field-valid ipt-w80">
             </td>
             <td>
-                <input type="number" name="stock_num" value="{{ item.form.stock_num }}" class="am-field-valid ipt-w80"
+                <input type="number" name="stockNum" value="{{ item.goodsSpec.stockNum }}" class="am-field-valid ipt-w80"
                        required>
             </td>
             <td>
-                <input type="number" name="goods_weight" value="{{ item.form.goods_weight }}" class="am-field-valid ipt-w80"
+                <input type="number" name="goodsWeight" value="{{ item.goodsSpec.goodsWeight }}" class="am-field-valid ipt-w80"
                        required>
             </td>
         </tr>

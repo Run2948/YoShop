@@ -279,9 +279,9 @@ namespace YoShop.Controllers
             return Yes("删除成功！");
         }
 
-        private async Task<List<UploadGroup>> GetUploadGroupList(string group_type = "image")
+        private async Task<List<UploadGroup>> GetUploadGroupList(string groupType = "image")
         {
-            return await _fsql.Select<UploadGroup>().Where(l => l.GroupType == group_type).OrderBy(l => l.Sort).ToListAsync();
+            return await _fsql.Select<UploadGroup>().Where(l => l.GroupType == groupType).OrderBy(l => l.Sort).ToListAsync();
         }
 
         #endregion

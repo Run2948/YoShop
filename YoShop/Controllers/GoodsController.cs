@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using YoShop.Extensions;
 using YoShop.Extensions.Common;
 using YoShop.Models;
+using YoShop.Models.Requests;
 using YoShop.Models.Views;
 
 namespace YoShop.Controllers
@@ -32,6 +33,7 @@ namespace YoShop.Controllers
             var list = await select
                 .Include(g => g.Category)
                 .IncludeMany(g => g.GoodsImages, then => then.Include(i => i.UploadFile))
+                .OrderByDescending(g => g.GoodsId)
                 .Page(page ?? 1, size ?? 15).ToListAsync();
             return View(new GoodsListViewModel(list.Mapper<List<GoodsDto>>(), total));
         }
@@ -45,31 +47,49 @@ namespace YoShop.Controllers
         {
             ViewData["category"] = await _fsql.Select<Category>().ToListAsync<CategorySelectDto>();
             ViewData["delivery"] = await _fsql.Select<Delivery>().ToListAsync<DeliverySelectDto>();
-            return View(new GoodsDto());
+            return View(new SellerGoodsRequest());
         }
 
         /// <summary>
         /// 添加商品
         /// </summary>
-        /// <param name="viewModel"></param>
+        /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost, Route("/goods/add"), ValidateAntiForgeryToken]
-        public async Task<IActionResult> Add(CategoryDto viewModel)
+        public async Task<IActionResult> Add(SellerGoodsRequest request)
         {
-            viewModel.WxappId = GetSellerSession().WxappId;
-            viewModel.CreateTime = DateTime.Now;
-            viewModel.UpdateTime = DateTime.Now;
+            request.WxappId = GetSellerSession().WxappId;
+            request.CreateTime = DateTime.Now;
+            request.UpdateTime = DateTime.Now;
+
             try
             {
-                var model = viewModel.Mapper<Category>();
-                await _fsql.Insert<Category>().AppendData(model).ExecuteAffrowsAsync();
+                // 保存商品
+                var goods = request.Mapper<Goods>();
+                long goodsId = await _fsql.Insert<Goods>().AppendData(goods).ExecuteIdentityAsync();
+                // 保存图片
+                var goodsImages = request.BuildGoodsImages((uint)goodsId);
+                if (goodsImages != null && goodsImages.Any())
+                    await _fsql.Insert<GoodsImage>().AppendData(goodsImages).ExecuteAffrowsAsync();
+                // 保存规格
+                if (request.SpecType == SpecType.单规格)
+                {
+                    var goodsSpec = request.BuildGoodsSpec((uint)goodsId);
+                    await _fsql.Insert<GoodsSpec>().AppendData(goodsSpec).ExecuteAffrowsAsync();
+                }
+                else
+                {
+                    var goodsSpecs = request.BuildGoodsSpecs((uint)goodsId);
+                    await _fsql.Insert<GoodsSpec>().AppendData(goodsSpecs).ExecuteAffrowsAsync();
+                    var goodsSpecRels = request.BuildGoodsSpecRels((uint)goodsId);
+                    await _fsql.Insert<GoodsSpecRel>().AppendData(goodsSpecRels).ExecuteAffrowsAsync();
+                }
             }
             catch (Exception e)
             {
                 LogManager.Error(GetType(), e);
                 return No(e.Message);
             }
-
             return YesRedirect("添加成功！", "/goods/index");
         }
 
@@ -91,20 +111,20 @@ namespace YoShop.Controllers
         /// <summary>
         /// 编辑商品
         /// </summary>
-        /// <param name="viewModel"></param>
+        /// <param name="request"></param>
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpPost, Route("/goods/edit/goodsId/{id}"), ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(CategoryDto viewModel, uint id)
+        public async Task<IActionResult> Edit(SellerGoodsRequest request, uint id)
         {
             var model = await _fsql.Select<Category>().Where(c => c.CategoryId == id).ToOneAsync();
             if (model == null) return NoOrDeleted();
             try
             {
-                model.Name = viewModel.Name;
-                model.ParentId = viewModel.ParentId;
-                model.Sort = viewModel.Sort;
-                model.ImageId = viewModel.ImageId;
+//                model.Name = request.Name;
+//                model.ParentId = request.ParentId;
+//                model.Sort = request.Sort;
+//                model.ImageId = request.ImageId;
                 model.UpdateTime = DateTime.Now.ConvertToTimeStamp();
                 await _fsql.Update<Category>().SetSource(model).ExecuteAffrowsAsync();
             }

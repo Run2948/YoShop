@@ -2,9 +2,9 @@
 
     // 商品规格数据
     var data = {
-            spec_attr: [],
-            spec_list: []
-        }
+        specAttr: [],
+        specList: []
+    }
 
         // 配置信息
         , setting = {
@@ -81,8 +81,8 @@
                 // 添加到数据库
                 var load = layer.load();
                 $.post(STORE_URL + '/goods.spec/addSpec', {
-                    spec_name: specNameInputValue,
-                    spec_value: specValueInputValue
+                    specName: specNameInputValue,
+                    specValue: specValueInputValue
                 }, function (result) {
                     layer.close(load);
                     if (result.code !== 1) {
@@ -92,12 +92,12 @@
                     // 清空输入内容
                     $specNameInput.val('') && $specValueInput.val('');
                     // 记录规格数据
-                    data.spec_attr.push({
-                        group_id: result.data.spec_id,
-                        group_name: specNameInputValue,
-                        spec_items: [{
-                            item_id: result.data.spec_value_id,
-                            spec_value: specValueInputValue
+                    data.specAttr.push({
+                        specId: result.data.specId,
+                        specName: specNameInputValue,
+                        specItems: [{
+                            specValueId: result.data.specValueId,
+                            specValueName: specValueInputValue
                         }]
                     });
                     // 渲染规格属性html
@@ -139,8 +139,8 @@
                 // 添加到数据库
                 var load = layer.load();
                 $.post(STORE_URL + '/goods.spec/addSpecValue', {
-                    spec_id: $specGroup.data('group-id'),
-                    spec_value: specItemInputValue
+                    specId: $specGroup.data('group-id'),
+                    specValue: specItemInputValue
                 }, function (result) {
                     layer.close(load);
                     if (result.code !== 1) {
@@ -148,9 +148,9 @@
                         return false;
                     }
                     // 记录规格数据
-                    data.spec_attr[$specGroup.data('index')].spec_items.push({
-                        item_id: result.data.spec_value_id,
-                        spec_value: specItemInputValue
+                    data.specAttr[$specGroup.data('index')].specItems.push({
+                        specValueId: result.data.specValueId,
+                        specValueName: specItemInputValue
                     });
                     // 渲染规格属性html
                     _this.renderHtml();
@@ -168,7 +168,7 @@
                 var index = $(this).parent().parent().attr('data-index');
                 layer.confirm('确定要删除该规则组吗？确认后不可恢复请谨慎操作', function (layerIndex) {
                     // 删除指定规则组
-                    data.spec_attr.splice(index, 1);
+                    data.specAttr.splice(index, 1);
                     // 重新渲染规格属性html
                     _this.renderHtml();
                     layer.close(layerIndex);
@@ -188,7 +188,7 @@
                     , itemIndex = $item.attr('data-item-index');
                 layer.confirm('确定要删除该规则吗？确认后不可恢复请谨慎操作', function (layerIndex) {
                     // 删除指定规则组
-                    data.spec_attr[groupIndex].spec_items.splice(itemIndex, 1);
+                    data.specAttr[groupIndex].specItems.splice(itemIndex, 1);
                     // 重新渲染规格属性html
                     _this.renderHtml();
                     layer.close(layerIndex);
@@ -213,8 +213,8 @@
                     }
                 });
                 if (!$.isEmptyObject(formData)) {
-                    data.spec_list.forEach(function (item, index) {
-                        data.spec_list[index].form = $.extend({}, data.spec_list[index].form, formData);
+                    data.specList.forEach(function (item, index) {
+                        data.specList[index].goodsSpec = $.extend({}, data.specList[index].goodsSpec, formData);
                     });
                     // 渲染商品规格table
                     _this.renderTableHtml();
@@ -239,7 +239,7 @@
             var $specTabel = this.$container.find('.spec-sku-tabel')
                 , $goodsSku = $specTabel.parent();
             // 商品规格为空：隐藏sku容器
-            if (data.spec_attr.length === 0) {
+            if (data.specAttr.length === 0) {
                 $specTabel.empty();
                 $goodsSku.hide();
                 return false;
@@ -258,48 +258,50 @@
         buildSpeclist: function () {
             // 规格组合总数 (table行数)
             var totalRow = 1;
-            for (var i = 0; i < data.spec_attr.length; i++) {
-                totalRow *= data.spec_attr[i].spec_items.length;
+            for (var i = 0; i < data.specAttr.length; i++) {
+                totalRow *= data.specAttr[i].specItems.length;
             }
             // 遍历tr 行
-            var spec_list = [];
+            var specList = [];
             for (i = 0; i < totalRow; i++) {
                 var rowData = [], rowCount = 1, specSkuIdAttr = [];
                 // 遍历td 列
-                for (var j = 0; j < data.spec_attr.length; j++) {
-                    var skuValues = data.spec_attr[j].spec_items;
+                for (var j = 0; j < data.specAttr.length; j++) {
+                    var specId = data.specAttr[j].specId;
+                    var skuValues = data.specAttr[j].specItems;
                     rowCount *= skuValues.length;
                     var anInterBankNum = (totalRow / rowCount)
                         , point = ((i / anInterBankNum) % skuValues.length);
                     if (0 === (i % anInterBankNum)) {
                         rowData.push({
-                            rowspan: anInterBankNum,
-                            item_id: skuValues[point].item_id,
-                            spec_value: skuValues[point].spec_value
+                            rowSpan: anInterBankNum,
+                            specId: specId,
+                            specValueId: skuValues[point].specValueId,
+                            specValueName: skuValues[point].specValueName
                         });
                     }
-                    specSkuIdAttr.push(skuValues[parseInt(point.toString())].item_id);
+                    specSkuIdAttr.push(skuValues[parseInt(point.toString())].specValueId);
                 }
-                spec_list.push({
-                    spec_sku_id: specSkuIdAttr.join('_'),
-                    rows: rowData,
-                    form: {}
+                specList.push({
+                    specSkuId: specSkuIdAttr.join('_'),
+                    goodsSpecRels: rowData,
+                    goodsSpec: {}
                 });
             }
             // 合并旧sku数据
-            if (data.spec_list.length > 0 && spec_list.length > 0) {
-                for (i = 0; i < spec_list.length; i++) {
-                    var overlap = data.spec_list.filter(function (val) {
-                        return val.spec_sku_id === spec_list[i].spec_sku_id;
+            if (data.specList.length > 0 && specList.length > 0) {
+                for (i = 0; i < specList.length; i++) {
+                    var overlap = data.specList.filter(function (val) {
+                        return val.specSkuId === specList[i].specSkuId;
                     });
-                    if (overlap.length > 0) spec_list[i].form = overlap[0].form;
+                    if (overlap.length > 0) specList[i].goodsSpec = overlap[0].goodsSpec;
                 }
             }
-            data.spec_list = spec_list;
+            data.specList = specList;
         },
 
         /**
-         * 输入规格信息自动同步更新spec_list
+         * 输入规格信息自动同步更新specList
          */
         updateSpecInputEvent: function () {
             var _this = this;
@@ -307,7 +309,7 @@
                 var $this = $(this)
                     , dataType = $this.attr('name')
                     , specIndex = $this.parent().parent().data('index');
-                data.spec_list[specIndex].form[dataType] = $this.val();
+                data.specList[specIndex].goodsSpec[dataType] = $this.val();
             });
         },
 
@@ -323,7 +325,7 @@
          * @returns {boolean}
          */
         isEmptySkuList: function () {
-            return !data.spec_list.length;
+            return !data.specList.length;
         }
 
     };

@@ -32,6 +32,7 @@ namespace YoShop.Models
         public Category Category { get; set; }
 
         public uint DeliveryId { get; set; }
+
         public Delivery Delivery { get; set; }
     }
 }

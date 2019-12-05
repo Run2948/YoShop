@@ -8,6 +8,9 @@ namespace YoShop.Models
     [JsonObject(MemberSerialization.OptIn), Table(Name = "goods_spec")]
     public partial class GoodsSpec : WxappEntity
     {
+        [JsonProperty, Column(Name = "goods_spec_id", DbType = "int(11) unsigned", IsIdentity = true)]
+        public uint GoodsSpecId { get; set; }
+
         [JsonProperty, Column(Name = "goods_id", DbType = "int(11) unsigned")]
         public uint GoodsId { get; set; }
 
@@ -19,9 +22,6 @@ namespace YoShop.Models
 
         [JsonProperty, Column(Name = "goods_sales", DbType = "int(11) unsigned")]
         public uint GoodsSales { get; set; }
-
-        [JsonProperty, Column(Name = "goods_spec_id", DbType = "int(11) unsigned", IsIdentity = true)]
-        public uint GoodsSpecId { get; set; }
 
         [JsonProperty, Column(Name = "goods_weight", DbType = "double unsigned")]
         public double GoodsWeight { get; set; }

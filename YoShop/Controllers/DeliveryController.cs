@@ -8,6 +8,7 @@ using Newtonsoft.Json.Linq;
 using YoShop.Extensions;
 using YoShop.Extensions.Common;
 using YoShop.Models;
+using YoShop.Models.Requests;
 using YoShop.Models.Views;
 
 namespace YoShop.Controllers
@@ -49,19 +50,19 @@ namespace YoShop.Controllers
         /// <summary>
         /// 保存配送设置
         /// </summary>
-        /// <param name="viewModel"></param>
+        /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost, Route("/setting.delivery/add"), ValidateAntiForgeryToken]
-        public async Task<IActionResult> Add(DeliveryWithRuleDto viewModel)
+        public async Task<IActionResult> Add(SellerDeliveryRequest request)
         {
-            viewModel.WxappId = GetSellerSession().WxappId;
-            viewModel.CreateTime = DateTime.Now;
-            viewModel.UpdateTime = DateTime.Now;
+            request.WxappId = GetSellerSession().WxappId;
+            request.CreateTime = DateTime.Now;
+            request.UpdateTime = DateTime.Now;
             try
             {
-                var deliveryId = await _fsql.Insert<Delivery>().AppendData(viewModel.Mapper<Delivery>()).ExecuteIdentityAsync();
-                var deliveryRules = viewModel.BuildDeliveryRuleDto((uint)deliveryId);
-                await _fsql.Insert<DeliveryRule>().AppendData(deliveryRules.Mapper<List<DeliveryRule>>()).ExecuteAffrowsAsync();
+                var deliveryId = await _fsql.Insert<Delivery>().AppendData(request.Mapper<Delivery>()).ExecuteIdentityAsync();
+                var deliveryRules = request.BuildDeliveryRules((uint)deliveryId);
+                await _fsql.Insert<DeliveryRule>().AppendData(deliveryRules).ExecuteAffrowsAsync();
             }
             catch (Exception e)
             {
@@ -108,34 +109,34 @@ namespace YoShop.Controllers
         /// <summary>
         /// 更新配送设置
         /// </summary>
-        /// <param name="viewModel"></param>
+        /// <param name="request"></param>
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpPost, Route("/setting.delivery/edit/deliveryId/{id}"), ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(DeliveryWithRuleDto viewModel, uint id)
+        public async Task<IActionResult> Edit(SellerDeliveryRequest request, uint id)
         {
             try
             {
                 var delivery = await _fsql.Select<Delivery>().Where(l => l.DeliveryId == id).ToOneAsync();
                 if (delivery == null) return No("该记录不存在或已被删除！");
 
-                viewModel.DeliveryId = delivery.DeliveryId;
-                viewModel.WxappId = delivery.WxappId;
-                viewModel.CreateTime = DateTime.Now;
-                viewModel.UpdateTime = DateTime.Now;
+                request.DeliveryId = delivery.DeliveryId;
+                request.WxappId = delivery.WxappId;
+                request.CreateTime = DateTime.Now;
+                request.UpdateTime = DateTime.Now;
 
-                delivery.Name = viewModel.Name;
-                delivery.Method = viewModel.Method.ToByte();
-                delivery.Sort = viewModel.Sort;
-                delivery.CreateTime = DateTimeExtensions.GetCurrentTimeStamp();
+                delivery.Name = request.Name;
+                delivery.Method = request.Method.ToByte();
+                delivery.Sort = request.Sort;
+                delivery.CreateTime = DateTime.Now.ConvertToTimeStamp();
 
                 var count = await _fsql.Update<Delivery>().SetSource(delivery).ExecuteAffrowsAsync();
                 if (count > 0)
                 {
-                    var deliveryRules = viewModel.BuildDeliveryRuleDto(delivery.DeliveryId);
+                    var deliveryRules = request.BuildDeliveryRules(delivery.DeliveryId);
                     count = await _fsql.Delete<DeliveryRule>().Where(l => l.DeliveryId == delivery.DeliveryId).ExecuteAffrowsAsync();
                     if (count > 0)
-                        await _fsql.Insert<DeliveryRule>().AppendData(deliveryRules.Mapper<List<DeliveryRule>>()).ExecuteAffrowsAsync();
+                        await _fsql.Insert<DeliveryRule>().AppendData(deliveryRules).ExecuteAffrowsAsync();
                 }
             }
             catch (Exception e)
