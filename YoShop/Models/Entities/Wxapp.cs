@@ -41,5 +41,8 @@ namespace YoShop.Models
 
         [JsonProperty, Column(Name = "service_image_id", DbType = "int(11) unsigned")]
         public uint ServiceImageId { get; set; }
+
+        [Navigate(nameof(ServiceImageId))]
+        public virtual UploadFile UploadFile { get; set; }
     }
 }

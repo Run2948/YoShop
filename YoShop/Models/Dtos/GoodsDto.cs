@@ -26,6 +26,8 @@ namespace YoShop.Models
 
         public SpecType SpecType { get; set; }
 
+        public string SpecMany { get; set; }
+
         public DeductStockType DeductStockType { get; set; }
 
         public uint CategoryId { get; set; }

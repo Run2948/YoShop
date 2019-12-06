@@ -37,6 +37,8 @@ namespace YoShop.Models.Requests
 
         public uint[] ImageIds { get; set; }
 
+        public List<GoodsImage> GoodsImages { get; set; }
+
         public GoodsSpecDto GoodsSpec { get; set; }
 
         public string SpecMany { get; set; }
@@ -111,6 +113,7 @@ namespace YoShop.Models.Requests
             var specMany = JsonConvert.DeserializeObject<SpecManyDto>(SpecMany);
             foreach (var specList in specMany.SpecList)
             {
+                specList.GoodsSpec.SpecSkuId = specList.SpecSkuId;
                 specList.GoodsSpec.GoodsId = goodsId;
                 specList.GoodsSpec.CreateTime = CreateTime;
                 specList.GoodsSpec.UpdateTime = UpdateTime;
@@ -127,6 +130,7 @@ namespace YoShop.Models.Requests
             var specMany = JsonConvert.DeserializeObject<SpecManyDto>(SpecMany);
             foreach (var specList in specMany.SpecList)
             {
+                specList.GoodsSpec.SpecSkuId = specList.SpecSkuId;
                 specList.GoodsSpec.GoodsId = GoodsId;
                 specList.GoodsSpec.CreateTime = CreateTime;
                 specList.GoodsSpec.UpdateTime = UpdateTime;

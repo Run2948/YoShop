@@ -36,6 +36,9 @@ namespace YoShop.Models
         [JsonProperty, Column(Name = "spec_type")]
         public byte SpecType { get; set; }
 
+        [JsonProperty, Column(Name = "spec_many", DbType = "text")]
+        public string SpecMany { get; set; }
+
         [JsonProperty, Column(Name = "deduct_stock_type")]
         public byte DeductStockType { get; set; }
 

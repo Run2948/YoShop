@@ -28,7 +28,7 @@ namespace YoShop.Controllers
         [HttpGet, Route("/goods/index")]
         public async Task<IActionResult> Index(int? page, int? size)
         {
-            var select = _fsql.Select<Goods>();
+            var select = _fsql.Select<Goods>().Where(l => l.IsDelete == 0);
             var total = await select.CountAsync();
             var list = await select
                 .Include(g => g.Category)
@@ -66,7 +66,7 @@ namespace YoShop.Controllers
             {
                 // 保存商品
                 var goods = request.Mapper<Goods>();
-                long goodsId = await _fsql.Insert<Goods>().AppendData(goods).ExecuteIdentityAsync();
+                var goodsId = await _fsql.Insert<Goods>().AppendData(goods).ExecuteIdentityAsync();
                 // 保存图片
                 var goodsImages = request.BuildGoodsImages((uint)goodsId);
                 if (goodsImages != null && goodsImages.Any())
@@ -101,11 +101,22 @@ namespace YoShop.Controllers
         [HttpGet, Route("/goods/edit/goodsId/{id}")]
         public async Task<IActionResult> Edit(uint id)
         {
-            var model = await _fsql.Select<Category>().Where(c => c.CategoryId == id).Include(c => c.UploadFile).ToOneAsync();
-            if (model == null) return NoOrDeleted();
-            var list = await _fsql.Select<Category>().Where(l => l.ParentId == 0).ToListAsync();
-            ViewData["first"] = list.Mapper<List<CategoryDto>>();
-            return View(model.Mapper<CategoryDto>());
+            var goods = await _fsql.Select<Goods>().Where(c => c.GoodsId == id).ToOneAsync();
+            if (goods == null) return NoOrDeleted();
+            var model = goods.Mapper<SellerGoodsRequest>();
+            var images = await _fsql.Select<GoodsImage>().Include(l => l.UploadFile).Where(l => l.GoodsId == id).ToListAsync();
+            if (images.Any())
+                model.ImageIds = images.Select(l => l.ImageId).ToArray();
+            model.GoodsImages = images;
+            model.GoodsSpec = new GoodsSpecDto();
+            if (model.SpecType == SpecType.单规格)
+            {
+                var goodsSpec = await _fsql.Select<GoodsSpec>().Where(s => s.GoodsId == id).ToOneAsync();
+                model.GoodsSpec = goodsSpec.Mapper<GoodsSpecDto>();
+            }
+            ViewData["category"] = await _fsql.Select<Category>().ToListAsync<CategorySelectDto>();
+            ViewData["delivery"] = await _fsql.Select<Delivery>().ToListAsync<DeliverySelectDto>();
+            return View(model);
         }
 
         /// <summary>
@@ -117,16 +128,38 @@ namespace YoShop.Controllers
         [HttpPost, Route("/goods/edit/goodsId/{id}"), ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(SellerGoodsRequest request, uint id)
         {
-            var model = await _fsql.Select<Category>().Where(c => c.CategoryId == id).ToOneAsync();
-            if (model == null) return NoOrDeleted();
+            var goods = await _fsql.Select<Goods>().Where(c => c.GoodsId == id).ToOneAsync();
+            if (goods == null) return NoOrDeleted();
             try
             {
-//                model.Name = request.Name;
-//                model.ParentId = request.ParentId;
-//                model.Sort = request.Sort;
-//                model.ImageId = request.ImageId;
-                model.UpdateTime = DateTime.Now.ConvertToTimeStamp();
-                await _fsql.Update<Category>().SetSource(model).ExecuteAffrowsAsync();
+                request.GoodsId = goods.GoodsId;
+                request.WxappId = goods.WxappId;
+                request.CreateTime = goods.CreateTime.ConvertToDateTime();
+                request.UpdateTime = DateTime.Now;
+
+                // 更新商品
+                var model = request.Mapper<Goods>();
+                await _fsql.Update<Goods>().SetSource(model).ExecuteAffrowsAsync();
+                // 更新图片
+                await _fsql.Delete<GoodsImage>().Where(l => l.GoodsId == goods.GoodsId).ExecuteAffrowsAsync();
+                var goodsImages = request.BuildGoodsImages(goods.GoodsId);
+                if (goodsImages != null && goodsImages.Any())
+                    await _fsql.Insert<GoodsImage>().AppendData(goodsImages).ExecuteAffrowsAsync();
+                // 更新规格
+                await _fsql.Delete<GoodsSpec>().Where(l => l.GoodsId == goods.GoodsId).ExecuteAffrowsAsync();
+                await _fsql.Delete<GoodsSpecRel>().Where(l => l.GoodsId == goods.GoodsId).ExecuteAffrowsAsync();
+                if (request.SpecType == SpecType.单规格)
+                {
+                    var goodsSpec = request.BuildGoodsSpec(goods.GoodsId);
+                    await _fsql.Insert<GoodsSpec>().AppendData(goodsSpec).ExecuteAffrowsAsync();
+                }
+                else
+                {
+                    var goodsSpecs = request.BuildGoodsSpecs(goods.GoodsId);
+                    await _fsql.Insert<GoodsSpec>().AppendData(goodsSpecs).ExecuteAffrowsAsync();
+                    var goodsSpecRels = request.BuildGoodsSpecRels(goods.GoodsId);
+                    await _fsql.Insert<GoodsSpecRel>().AppendData(goodsSpecRels).ExecuteAffrowsAsync();
+                }
             }
             catch (Exception e)
             {
@@ -153,7 +186,7 @@ namespace YoShop.Controllers
                 LogManager.Error(GetType(), e);
                 return No(e.Message);
             }
-            return YesRedirect("删除成功！", "/goods.category/index");
+            return YesRedirect("删除成功！", "/goods/index");
         }
     }
 }
