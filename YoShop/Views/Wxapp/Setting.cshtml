@@ -1,4 +1,6 @@
-﻿@{
+﻿@model Wxapp
+
+@{
     ViewData["Title"] = "小程序设置";
     ViewBag.SecondSidebarIndex = 4;
 }
@@ -18,8 +20,7 @@
                                     AppID <span class="tpl-form-line-small-title">小程序ID</span>
                                 </label>
                                 <div class="am-u-sm-9">
-                                    <input type="text" class="tpl-form-input" name="wxapp[app_id]"
-                                           value="<?= $wxapp['app_id'] ?>" required>
+                                    <input type="text" class="tpl-form-input" asp-for="AppId" required>
                                 </div>
                             </div>
                             <div class="am-form-group">
@@ -27,8 +28,7 @@
                                     AppSecret <span class="tpl-form-line-small-title">小程序密钥</span>
                                 </label>
                                 <div class="am-u-sm-9">
-                                    <input type="text" class="tpl-form-input" name="wxapp[app_secret]"
-                                           value="<?= $wxapp['app_secret'] ?>" required>
+                                    <input type="text" class="tpl-form-input" asp-for="AppSecret" required>
                                 </div>
                             </div>
                             <div class="widget-head am-cf">
@@ -39,8 +39,7 @@
                                     微信支付商户号 <span class="tpl-form-line-small-title">MCHID</span>
                                 </label>
                                 <div class="am-u-sm-9">
-                                    <input type="text" class="tpl-form-input" name="wxapp[mchid]"
-                                           value="<?= $wxapp['mchid'] ?>">
+                                    <input type="text" class="tpl-form-input" asp-for="MchId">
                                 </div>
                             </div>
                             <div class="am-form-group">
@@ -48,8 +47,7 @@
                                     微信支付密钥 <span class="tpl-form-line-small-title">APIKEY</span>
                                 </label>
                                 <div class="am-u-sm-9">
-                                    <input type="text" class="tpl-form-input" name="wxapp[apikey]"
-                                           value="<?= $wxapp['apikey'] ?>">
+                                    <input type="text" class="tpl-form-input" asp-for="ApiKey">
                                 </div>
                             </div>
 
@@ -63,12 +61,12 @@
                                   </label>
                                   <div class="am-u-sm-9">
                                       <label class="am-radio-inline">
-                                          <input type="radio" name="wxapp[is_service]" value="1" data-am-ucheck
-                                              <?= $wxapp['is_service'] ? 'checked' : '' ?>> 开启
+                                          <input type="radio" name="IsService" value="1" data-am-ucheck
+                                              @@(Model.IsService == 1 ? "checked" : "")> 开启
                                       </label>
                                       <label class="am-radio-inline">
-                                          <input type="radio" name="wxapp[is_service]" value="0" data-am-ucheck
-                                              <?= $wxapp['is_service'] ? '' : 'checked' ?>> 关闭
+                                          <input type="radio" name="IsService" value="0" data-am-ucheck
+                                              @@(Model.IsService == 0 ? "checked" : "")> 关闭
                                       </label>
                                       <div class="help-block">
                                           <small>客服图标显示位置：首页、商品详情页、用户中心页、订单详情页
@@ -83,18 +81,18 @@
                                   </label>
                                   <div class="am-u-sm-9">
                                       <div class="am-form-file">
-                                          <div class="upload-file" data-name="wxapp[service_image]">
+                                          <div class="upload-file" data-name="service_image">
                                               <i class="am-icon-cloud-upload"></i> 上传图片
                                           </div>
                                           <div class="uploader-list am-cf">
-                                              <?php if ($wxapp['service_image']): ?>
+                                              @@if (Model.ServiceImage != null)
+                                              {
                                                   <div class="file-item thumbnail">
-                                                      <img src="<?= $wxapp['service_image']['file_path'] ?>">
-                                                      <input type="hidden" name="wxapp[service_image]"
-                                                             value="<?= $wxapp['service_image']['file_name'] ?>">
+                                                      <img src="@@Model.ServiceImage.FileUrl">
+                                                      <input type="hidden" asp-for="ServiceImageId">
                                                       <i class="iconfont icon-shanchu file-item-delete"></i>
                                                   </div>
-                                              <?php endif; ?>
+                                              }
                                           </div>
                                       </div>
                                   </div>
@@ -106,12 +104,12 @@
                                   <label class="am-u-sm-3 am-form-label">电话客服</label>
                                   <div class="am-u-sm-9">
                                       <label class="am-radio-inline">
-                                          <input type="radio" name="wxapp[is_phone]" value="1" data-am-ucheck
-                                              <?= $wxapp['is_phone'] ? 'checked' : '' ?>> 开启
+                                          <input type="radio" name="IsPhone" value="1" data-am-ucheck
+                                                 @@(Model.IsPhone ==0 ? "checked" : "" )> 开启
                                       </label>
                                       <label class="am-radio-inline">
                                           <input type="radio" name="wxapp[is_phone]" value="0" data-am-ucheck
-                                              <?= $wxapp['is_phone'] ? '' : 'checked' ?>> 关闭
+                                                 @@(Model.IsPhone ==0 ? "checked" : "" )> 关闭
                                       </label>
                                       <div class="help-block">
                                           <small>客服图标显示位置：首页、商品详情页、用户中心页、订单详情页</small>
@@ -124,18 +122,18 @@
                                   </label>
                                   <div class="am-u-sm-9">
                                       <div class="am-form-file">
-                                          <div class="upload-file" data-name="wxapp[phone_image]">
+                                          <div class="upload-file" data-name="phone_image">
                                               <i class="am-icon-cloud-upload"></i> 上传图片
                                           </div>
                                           <div class="uploader-list am-cf">
-                                              <?php if ($wxapp['phone_image']): ?>
+                                              @@if (Model.PhoneImage != null)
+                                              {
                                                   <div class="file-item thumbnail">
-                                                      <img src="<?= $wxapp['phone_image']['file_path'] ?>">
-                                                      <input type="hidden" name="wxapp[phone_image]"
-                                                             value="<?= $wxapp['phone_image']['file_name'] ?>">
+                                                      <img src="@@Model.PhoneImage.FileUrl">
+                                                      <input type="hidden" asp-for="PhoneImageId">
                                                       <i class="iconfont icon-shanchu file-item-delete"></i>
                                                   </div>
-                                              <?php endif; ?>
+                                              }
                                           </div>
                                       </div>
                                   </div>
@@ -145,8 +143,7 @@
                                       电话号码
                                   </label>
                                   <div class="am-u-sm-9">
-                                      <input type="text" class="tpl-form-input" name="wxapp[phone_no]"
-                                             value="<?= $wxapp['phone_no'] ?>">
+                                      <input type="text" class="tpl-form-input" asp-for="PhoneNo">
                                       <small>请填写正确的座机号码或手机号码</small>
                                   </div>
                               </div>

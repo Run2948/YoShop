@@ -22,19 +22,20 @@ namespace YoShop.Controllers
         }
 
         #region 管理首页
+
         /// <summary>
         /// 管理首页
         /// </summary>
         /// <returns></returns>
         public IActionResult Index()
         {
-            //            var select = _fsql.Select<Category>().Include(a => a.UploadFile).Include(a => a.Parent);
-            //            var list = await select.Page(1, 12).ToListAsync();
             return View();
         }
+
         #endregion
 
         #region 修改密码
+
         /// <summary>
         /// 修改密码页面
         /// </summary>
@@ -72,6 +73,7 @@ namespace YoShop.Controllers
             }
             return Yes("更新成功！");
         }
+
         #endregion
 
         #region 注销登录

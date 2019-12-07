@@ -13,22 +13,22 @@ namespace YoShop.Models.Requests
         /// <summary>
         /// 当前页
         /// </summary>
-        public int current_page { get; set; } = 1;
+        public int CurPage { get; set; } = 1;
         /// <summary>
         /// 总页数
         /// </summary>
-        public int last_page { get; set; }
+        public int LastPage { get; set; }
         /// <summary>
         /// 每页条数
         /// </summary>
-        public int per_page { get; set; } = 32;
+        public int PerPage { get; set; } = 32;
         /// <summary>
         /// 总记录数
         /// </summary>
-        public int total  = 0;
+        public int Total = 0;
         /// <summary>
         /// 数据
         /// </summary>
-        public object data { get; set; }
+        public object Data { get; set; }
     }
 }

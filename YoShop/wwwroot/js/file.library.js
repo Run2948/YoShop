@@ -51,7 +51,7 @@
          */
         showLibraryModal: function () {
             var _this = this;
-            _this.getJsonData({ group_id: -1 }, function (data) {
+            _this.getJsonData({ groupId: -1 }, function (data) {
                 data.is_default = true;
                 // 捕获页
                 layer.open({
@@ -136,7 +136,7 @@
                 layer.confirm('确定移动选中的文件吗？', {title: '友情提示'}, function (index) {
                     var load = layer.load();
                     $.post(STORE_URL + '/upload.library/moveFiles', {
-                        group_id: groupId
+                        groupId: groupId
                         , fileIds: fileIds
                     }, function (result) {
                         layer.msg(result.msg);
@@ -228,7 +228,7 @@
             });
             // 文件上传前触发,添加附带参数
             uploader.on('uploadBeforeSend', function (obj, data) {
-                data.group_id = _this.getCurrentGroupId();
+                data.groupId = _this.getCurrentGroupId();
             });
             // 文件上传成功，给item添加成功class, 用样式标记上传成功。
             uploader.on('uploadSuccess', function (file, response) {
@@ -267,8 +267,8 @@
                 layer.prompt({title: '请输入新分组名称'}, function (value, index) {
                     var load = layer.load();
                     $.post(STORE_URL + '/upload.library/addGroup', {
-                        group_name: value,
-                        group_type: _this.options.type
+                        groupName: value,
+                        groupType: _this.options.type
                     }, function (result) {
                         layer.msg(result.msg);
                         if (result.code === 1) {
@@ -295,18 +295,18 @@
             var _this = this;
             _this.$element.find('.file-group').on('click', '.group-edit', function () {
                 var $li = $(this).parent()
-                    , group_id = $li.data('group-id');
+                    , groupId = $li.data('group-id');
                 layer.prompt({title: '修改分组名称', value: $li.attr('title')}, function (value, index) {
                     var load = layer.load();
                     $.post(STORE_URL + '/upload.library/editGroup', {
-                        group_id: group_id
-                        , group_name: value
+                        groupId: groupId
+                        , groupName: value
                     }, function (result) {
                         layer.msg(result.msg);
                         if (result.code === 1) {
                             $li.attr('title', value).find('.group-name').text(value);
                             var $groupSelectList = _this.$element.find('.group-select > .group-list');
-                            $groupSelectList.find('[data-group-id="' + group_id + '"]').text(value);
+                            $groupSelectList.find('[data-group-id="' + groupId + '"]').text(value);
                         }
                         layer.close(load);
                     });
@@ -323,17 +323,17 @@
             var _this = this;
             _this.$element.find('.file-group').on('click', '.group-delete', function () {
                 var $li = $(this).parent()
-                    , group_id = $li.data('group-id');
+                    , groupId = $li.data('group-id');
                 layer.confirm('确定删除该分组吗？', {title: '友情提示'}, function (index) {
                     var load = layer.load();
                     $.post(STORE_URL + '/upload.library/deleteGroup', {
-                        group_id: group_id
+                        groupId: groupId
                     }, function (result) {
                         layer.msg(result.msg);
                         if (result.code === 1) {
                             $li.remove();
                             var $groupSelectList = _this.$element.find('.group-select > .group-list');
-                            $groupSelectList.find('[data-group-id="' + group_id + '"]').remove();
+                            $groupSelectList.find('[data-group-id="' + groupId + '"]').remove();
                         }
                         layer.close(load);
                     });
@@ -402,8 +402,8 @@
             var _this = this
                 , groupId = this.getCurrentGroupId();
             // 重新渲染文件列表
-            _this.getJsonData({ group_id: groupId, current_page: page || 1}, function (data) {
-                _this.$element.find('#file-list-body').html(template('tpl-file-list', data.file_list));
+            _this.getJsonData({ groupId: groupId, curPage: page || 1}, function (data) {
+                _this.$element.find('#file-list-body').html(template('tpl-file-list', data.fileList));
             });
         },
 
@@ -416,8 +416,8 @@
             this.$element.find('.file-list-item > li.active').each(function (index) {
                 var $this = $(this);
                 selectedList[index] = {
-                    file_id: $this.data('file-id')
-                    , file_path: $this.data('file-path')
+                    fileId: $this.data('file-id')
+                    , filePath: $this.data('file-path')
                 };
             });
             return selectedList;
@@ -431,7 +431,7 @@
             var fileList = this.getSelectedFiles();
             var data = [];
             fileList.forEach(function (item) {
-                data.push(item.file_id);
+                data.push(item.fileId);
             });
             return data;
         },

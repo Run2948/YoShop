@@ -17,6 +17,9 @@ namespace YoShop.Models
     [JsonObject(MemberSerialization.OptIn), Table(Name = "wxapp_navbar")]
     public partial class WxappNavbar : WxappEntity
     {
+        [JsonProperty, Column(Name = "navbar_id", DbType = "int(11) unsigned", IsIdentity = true, IsPrimary = true)]
+        public uint NavbarId { get; set; }
+
         [JsonProperty, Column(Name = "wxapp_title", DbType = "varchar(100)")]
         public string WxappTitle { get; set; }
 

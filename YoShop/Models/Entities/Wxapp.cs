@@ -6,6 +6,8 @@ using FreeSql.DataAnnotations;
 
 namespace YoShop.Models
 {
+    // alter table wxapp AUTO_INCREMENT=10000;
+
     [JsonObject(MemberSerialization.OptIn), Table(Name = "wxapp")]
     public partial class Wxapp : BaseEntity
     {
@@ -36,6 +38,9 @@ namespace YoShop.Models
         [JsonProperty, Column(Name = "phone_image_id", DbType = "int(11) unsigned")]
         public uint PhoneImageId { get; set; }
 
+        [Navigate(nameof(PhoneImageId))]
+        public virtual UploadFile PhoneImage { get; set; }
+
         [JsonProperty, Column(Name = "phone_no", DbType = "varchar(20)")]
         public string PhoneNo { get; set; }
 
@@ -43,6 +48,6 @@ namespace YoShop.Models
         public uint ServiceImageId { get; set; }
 
         [Navigate(nameof(ServiceImageId))]
-        public virtual UploadFile UploadFile { get; set; }
+        public virtual UploadFile ServiceImage { get; set; }
     }
 }

@@ -13,14 +13,14 @@ namespace YoShop.Models.Requests
         /// <summary>
         /// Id
         /// </summary>
-        public uint group_id { get; set; }
+        public uint GroupId { get; set; }
         /// <summary>
         /// 分组名称
         /// </summary>
-        public string group_name { get; set; }
+        public string GroupName { get; set; }
         /// <summary>
         /// 分组类别
         /// </summary>
-        public string group_type { get; set; }
+        public string GroupType { get; set; }
     }
 }

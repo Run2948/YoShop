@@ -101,7 +101,7 @@
 			},
 			{
 				"name": "导航设置",
-				"index": "/wxapp/tabbar"
+				"index": "/wxapp/navbar"
 			}
 		]
 	},

@@ -45,7 +45,7 @@ namespace YoShop.Extensions.Common
         /// <summary>
         /// 网站租户Id
         /// </summary>
-        public static uint TalentId { get; set; } = 10001;
+        public static uint TalentId { get; set; }
 
         /// <summary>
         /// 访问量

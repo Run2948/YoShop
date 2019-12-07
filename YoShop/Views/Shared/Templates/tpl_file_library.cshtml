@@ -3,13 +3,13 @@
     <div class="row">
         <div class="file-group">
             <ul class="nav-new">
-                <li class="ng-scope {{ is_default ? 'active' : '' }}" data-group-id="-1">
+                <li class="ng-scope {{ isDefault ? 'active' : '' }}" data-group-id="-1">
                     <a class="group-name am-text-truncate" href="javascript:void(0);" title="全部">全部</a>
                 </li>
                 <li class="ng-scope" data-group-id="0">
                     <a class="group-name am-text-truncate" href="javascript:void(0);" title="未分组">未分组</a>
                 </li>
-                {{ each group_list }}
+                {{ each groupList }}
                 <li class="ng-scope"
                     data-group-id="{{ $value.groupId }}" title="{{ $value.groupName }}">
                     <a class="group-edit" href="javascript:void(0);" title="编辑分组">
@@ -36,7 +36,7 @@
                             </button>
                             <ul class="group-list am-dropdown-content">
                                 <li class="am-dropdown-header">请选择分组</li>
-                                {{ each group_list }}
+                                {{ each groupList }}
                                 <li>
                                     <a class="move-file-group" data-group-id="{{ $value.groupId }}"
                                        href="javascript:void(0);">{{ $value.groupName }}</a>
@@ -60,7 +60,7 @@
                 </div>
             </div>
             <div id="file-list-body" class="v-box-body">
-                {{ include 'tpl-file-list' file_list }}
+                {{ include 'tpl-file-list' fileList }}
             </div>
             <div class="v-box-footer am-cf"></div>
         </div>
@@ -73,17 +73,17 @@
     <ul class="file-list-item">
         {{ include 'tpl-file-list-item' data }}
     </ul>
-    {{ if last_page > 1 }}
+    {{ if lastPage > 1 }}
     <div class="file-page-box am-fr">
         <ul class="pagination">
-            {{ if current_page > 1 }}
+            {{ if curPage > 1 }}
             <li>
-                <a class="switch-page" href="javascript:void(0);" title="上一页" data-page="{{ current_page - 1 }}">«</a>
+                <a class="switch-page" href="javascript:void(0);" title="上一页" data-page="{{ curPage - 1 }}">«</a>
             </li>
             {{ /if }}
-            {{ if current_page < last_page }}
+            {{ if curPage < lastPage }}
             <li>
-                <a class="switch-page" href="javascript:void(0);" title="下一页" data-page="{{ current_page + 1 }}">»</a>
+                <a class="switch-page" href="javascript:void(0);" title="下一页" data-page="{{ curPage + 1 }}">»</a>
             </li>
             {{ /if }}
         </ul>

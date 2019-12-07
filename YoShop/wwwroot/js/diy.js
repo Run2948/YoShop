@@ -12,7 +12,7 @@
          */
         , defaultData = {
             search: {
-                params: {'placeholder': '请输入关键字进行搜索'},
+                params: { 'placeholder': '请输入关键字进行搜索' },
                 style: {
                     textAlign: 'left',
                     searchStyle: ''
@@ -25,12 +25,12 @@
                 },
                 data: [
                     {
-                        imgUrl: BASE_URL + 'assets/store/img/diy/banner_01.jpg',
+                        imgUrl: BASE_URL + '/img/diy/banner_01.jpg',
                         imgName: 'banner-1.jpg',
                         linkUrl: ''
                     },
                     {
-                        imgUrl: BASE_URL + 'assets/store/img/diy/banner_02.jpg',
+                        imgUrl: BASE_URL + '/img/diy/banner_02.jpg',
                         imgName: 'banner-2.jpg',
                         linkUrl: ''
                     }
@@ -82,7 +82,7 @@
                                 var newItems = {};
                                 $phoneMain.find('.drag').each(function () {
                                     var itemId = $(this).data('itemid');
-                                    newItems[itemId] = diyData.items[itemId]
+                                    newItems[itemId] = diyData.items[itemId];
                                 });
                                 diyData.items = newItems;
                             }
@@ -179,7 +179,7 @@
                      */
                     backTop: function () {
                         this.diyMenu.find('#back-top').click(function () {
-                            $('html,body').animate({scrollTop: 0}, 100);
+                            $('html,body').animate({ scrollTop: 0 }, 100);
                         });
                     },
 
@@ -189,10 +189,10 @@
                     submit: function () {
                         $('#submit').click(function () {
                             if ($.isEmptyObject(diyData.items)) {
-                                layer.msg('至少存在一个组件', {anim: 6});
+                                layer.msg('至少存在一个组件', { anim: 6 });
                                 return false;
                             }
-                            $.post('', {data: diyData}, function (result) {
+                            $.post(BASE_URL + '', { data: JSON.stringify(diyData) }, function (result) {
                                 result.code === 1 ? $.show_success(result.msg, result.url)
                                     : $.show_error(result.msg);
                             });
@@ -216,34 +216,33 @@
                      * @param $items
                      */
                     banner: function (itemId, $items) {
-                        var data = method.diyData.additemData(itemId, 'banner')
+                        var data = method.diyData.addItemData(itemId, 'banner')
                             , $html = $(
-                            '<div class="item" data-key="' + data.dataId + '">' +
-                            '  <div class="container">' +
-                            '    <div class="item-image"> <img src="' + data.imgUrl + '" alt=""> </div>' +
-                            '    <div class="item-form am-form-file">' +
-                            '        <div class="input-group">' +
-                            '            <input type="text" name="imgName" data-bind="data.' + data.dataId + '.imgName"' +
-                            '               value="' + data.imgName + '" placeholder="请选择图片" readonly>' +
-                            '            <span class="input-group-addon">选择图片</span>' +
-                            '            <input type="hidden" name="imgUrl" data-bind="data.' + data.dataId + '.imgUrl"' +
-                            '                value="' + data.imgUrl + '">' +
-                            '        </div>' +
-                            '        <div class="input-group" style="margin-top:10px;">' +
-                            '            <input type="text" name="linkUrl" data-bind="data.' + data.dataId + '.linkUrl"' +
-                            '               value="" placeholder="请输入链接地址    例：page/index/index">' +
-                            '        </div>' +
-                            '    </div>' +
-                            '  </div>' +
-                            '  <i class="iconfont icon-shanchu item-delete"></i>' +
-                            '</div>'
-                        );
+                                '<div class="item" data-key="' + data.dataId + '">' +
+                                '  <div class="container">' +
+                                '    <div class="item-image"> <img src="' + data.imgUrl + '" alt=""> </div>' +
+                                '    <div class="item-form am-form-file">' +
+                                '        <div class="input-group">' +
+                                '            <input type="text" name="imgName" data-bind="data.' + data.dataId + '.imgName"' +
+                                '               value="' + data.imgName + '" placeholder="请选择图片" readonly>' +
+                                '            <span class="input-group-addon">选择图片</span>' +
+                                '            <input type="hidden" name="imgUrl" data-bind="data.' + data.dataId + '.imgUrl"' +
+                                '                value="' + data.imgUrl + '">' +
+                                '        </div>' +
+                                '        <div class="input-group" style="margin-top:10px;">' +
+                                '            <input type="text" name="linkUrl" data-bind="data.' + data.dataId + '.linkUrl"' +
+                                '               value="" placeholder="请输入链接地址    例：page/index/index">' +
+                                '        </div>' +
+                                '    </div>' +
+                                '  </div>' +
+                                '  <i class="iconfont icon-shanchu item-delete"></i>' +
+                                '</div>'
+                            );
                         console.log('asd');
                         // 选择图片
                         method.editor.event.selectImages($html);
                         $items.append($html);
                     }
-
                 },
 
                 // 事件方法
@@ -310,7 +309,7 @@
                         $html.on('click', '.item-delete', function () {
                             var $item = $(this).parent();
                             if ($html.find('.item-delete').length <= 1) {
-                                layer.msg('至少保留一个', {anim: 6});
+                                layer.msg('至少保留一个', { anim: 6 });
                                 return false;
                             }
                             layer.confirm('您确定要删除吗？', {
@@ -352,6 +351,7 @@
                         $html.find('.input-group-addon').selectImages({
                             imagesList: '.item-image'
                             , done: function (data, $addon) {
+                                console.log(data);
                                 $addon.prev('input').val(data[0].filePath).change();
                                 $addon.next('input').val(data[0].filePath).change();
                                 $addon.parent().parent().prev(this.imagesList).html(
@@ -388,8 +388,8 @@
                     var item = diyData.items[itemId]
                         , html = template('tpl_diy_' + item.type, item)
                         , $diy = function () {
-                        return $('#diy-' + item.id);
-                    };
+                            return $('#diy-' + item.id);
+                        };
                     $diy().prop('outerHTML', html).addClass('selected');
                     $diy().addClass('selected');
                 },
@@ -434,8 +434,6 @@
                     // // 注册文件上传
                     // method.editor.event.upload();
                 }
-
-
             },
 
             /**
@@ -478,10 +476,10 @@
                  * @param itemType
                  * @returns {*}
                  */
-                additemData: function (itemId, itemType) {
+                addItemData: function (itemId, itemType) {
                     var dataId = this.newDataId()
                         , defaultItemData = defaultData[itemType].data[0]
-                        , data = $.extend(true, {dataId: dataId}, defaultItemData);
+                        , data = $.extend(true, { dataId: dataId }, defaultItemData);
                     diyData.items[itemId].data[dataId] = data;
                     return data;
                 },
@@ -505,7 +503,7 @@
         // diy 数据
         diyData = data;
         // 配置信息
-        options = $.extend({}, {phoneMain: '#phone-main', editor: '#diy-editor'}, opts);
+        options = $.extend({}, { phoneMain: '#phone-main', editor: '#diy-editor' }, opts);
         // 执行初始化
         method.init.execute();
     }

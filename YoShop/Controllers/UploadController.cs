@@ -44,16 +44,16 @@ namespace YoShop.Controllers
         /// </summary>
         /// <param name="request"></param>
         /// <param name="type"></param>
-        /// <param name="group_id"></param>
+        /// <param name="groupId"></param>
         /// <returns></returns>
         [HttpGet, Route("/upload.library/fileList")]
-        public async Task<IActionResult> LibraryFileList(FilePageRequest request, string type = "image", int group_id = -1)
+        public async Task<IActionResult> LibraryFileList(FilePageRequest request, string type = "image", int groupId = -1)
         {
             var groupList = await GetUploadGroupList(type);
-            var data = await GetUploadFileList(group_id, type, request);
-            request.data = data;
-            request.last_page = (int)Math.Ceiling(request.total * 1.0f / request.per_page * 1.0f);
-            return YesResult(new { group_list = groupList, file_list = request });
+            var data = await GetUploadFileList(request, groupId, type);
+            request.Data = data;
+            request.LastPage = (int)Math.Ceiling(request.Total * 1.0f / request.PerPage * 1.0f);
+            return YesResult(new { groupList = groupList, fileList = request });
         }
 
         /// <summary>
@@ -76,11 +76,11 @@ namespace YoShop.Controllers
                     FileType = "image",
                     Storage = "local",
                     IsDelete = 0,
-                    GroupId = request.group_id,
-                    FileSize = request.size,
+                    GroupId = request.GroupId,
+                    FileSize = request.Size,
                     FileUrl = result.Msg,
-                    FileName = request.name,
-                    Extension = Path.GetExtension(request.name).TrimStart('.'),
+                    FileName = request.Name,
+                    Extension = Path.GetExtension(request.Name).TrimStart('.'),
                     WxappId = GetSellerSession().WxappId
                 };
 
@@ -97,17 +97,17 @@ namespace YoShop.Controllers
         /// <summary>
         /// 文件库移动文件
         /// </summary>
-        /// <param name="group_id"></param>
+        /// <param name="groupId"></param>
         /// <param name="fileIds"></param>
         /// <returns></returns>
         [HttpPost, Route("/upload.library/moveFiles")]
-        public async Task<IActionResult> LibraryMoveFiles(uint group_id, uint[] fileIds)
+        public async Task<IActionResult> LibraryMoveFiles(uint groupId, uint[] fileIds)
         {
             try
             {
                 if (fileIds.Length > 0)
                 {
-                    await _fsql.Update<UploadFile>().Set(l => l.GroupId == group_id).Where(l => fileIds.Contains(l.FileId))
+                    await _fsql.Update<UploadFile>().Set(l => l.GroupId == groupId).Where(l => fileIds.Contains(l.FileId))
                          .ExecuteAffrowsAsync();
                 }
             }
@@ -142,14 +142,14 @@ namespace YoShop.Controllers
             return Yes("删除成功！");
         }
 
-        private async Task<List<UploadFile>> GetUploadFileList(int group_id, string type = "image", FilePageRequest request = null)
+        private async Task<List<UploadFile>> GetUploadFileList(FilePageRequest request, int groupId, string type = "image")
         {
             var select = _fsql.Select<UploadFile>();
-            return group_id == -1
+            return groupId == -1
                 ? await @select.Where(l => l.FileType == type && l.IsDelete == 0).OrderBy(l => l.FileId)
-                    .Page(request.current_page, request.per_page).ToListAsync()
-                : await @select.Where(l => l.FileType == type && l.IsDelete == 0 && l.GroupId == group_id)
-                    .OrderBy(l => l.FileId).Page(request.current_page, request.per_page).ToListAsync();
+                    .Page(request.CurPage, request.PerPage).ToListAsync()
+                : await @select.Where(l => l.FileType == type && l.IsDelete == 0 && l.GroupId == groupId)
+                    .OrderBy(l => l.FileId).Page(request.CurPage, request.PerPage).ToListAsync();
         }
 
         /// <summary>
@@ -209,12 +209,12 @@ namespace YoShop.Controllers
         [HttpPost, Route("/upload.library/addGroup")]
         public async Task<IActionResult> LibraryAddGroup(UploadGroupRequest request)
         {
-            var timestamp = DateTimeExtensions.GetCurrentTimeStamp();
+            var timestamp = DateTime.Now.ConvertToTimeStamp();
 
             var model = new UploadGroup
             {
-                GroupName = request.group_name,
-                GroupType = request.group_type,
+                GroupName = request.GroupName,
+                GroupType = request.GroupType,
                 Sort = 100,
                 WxappId = GetSellerSession().WxappId,
                 CreateTime = timestamp,
@@ -231,7 +231,7 @@ namespace YoShop.Controllers
                 return No(e.Message);
             }
 
-            return YesResult("添加成功！", new { groupId, groupName = request.group_name });
+            return YesResult("添加成功！", new { groupId, request.GroupName });
         }
 
         /// <summary>
@@ -243,10 +243,10 @@ namespace YoShop.Controllers
         {
             try
             {
-                var model = await _fsql.Select<UploadGroup>().Where(l => l.GroupId == request.group_id).ToOneAsync();
+                var model = await _fsql.Select<UploadGroup>().Where(l => l.GroupId == request.GroupId).ToOneAsync();
                 if (model == null) return No("文件分组不存在或已被删除");
-                model.GroupName = request.group_name;
-                model.UpdateTime = DateTimeExtensions.GetCurrentTimeStamp();
+                model.GroupName = request.GroupName;
+                model.UpdateTime = DateTime.Now.ConvertToTimeStamp();
                 await _fsql.Update<UploadGroup>().SetSource(model).ExecuteAffrowsAsync();
             }
             catch (Exception e)
@@ -262,13 +262,13 @@ namespace YoShop.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost, Route("/upload.library/deleteGroup")]
-        public async Task<IActionResult> LibraryDeleteGroup(int group_id)
+        public async Task<IActionResult> LibraryDeleteGroup(int groupId)
         {
             try
             {
-                var _ = await _fsql.Delete<UploadGroup>().Where(l => l.GroupId == group_id).ExecuteAffrowsAsync();
+                var _ = await _fsql.Delete<UploadGroup>().Where(l => l.GroupId == groupId).ExecuteAffrowsAsync();
                 if (_ > 0)
-                    await _fsql.Update<UploadFile>().Set(l => l.GroupId == 0).Where(l => l.GroupId == group_id).ExecuteAffrowsAsync();
+                    await _fsql.Update<UploadFile>().Set(l => l.GroupId == 0).Where(l => l.GroupId == groupId).ExecuteAffrowsAsync();
             }
             catch (Exception e)
             {

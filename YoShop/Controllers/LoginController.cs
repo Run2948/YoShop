@@ -47,8 +47,8 @@ namespace YoShop.Controllers
             if (Request.Cookies.Count > 2)
             {
                 string name = Request.Cookies["seller_username"];
-                string pwd = Request.Cookies["seller_password"]?.Md5Encrypt();
-                var loginSeller = await _fsql.Select<StoreUser>().Where(s => s.UserName == name && s.Password == pwd).ToOneAsync();
+                string pwd = Request.Cookies["seller_password"];
+                var loginSeller = await _fsql.Select<StoreUser>().Where(s => s.UserName == HttpUtility.HtmlDecode(name) && s.Password == pwd).ToOneAsync();
                 if (loginSeller != null)
                 {
                     Response.Cookies.Append("seller_username", name, new CookieOptions() { Expires = DateTime.Now.AddDays(7) });
@@ -57,6 +57,7 @@ namespace YoShop.Controllers
                     //初始化系统设置参数
                     var settings = await _fsql.Select<Setting>().ToListAsync();
                     GlobalConfig.SystemSettings = settings.ToDictionary(s => s.Key, s => JObject.Parse(s.Values));
+                    GlobalConfig.TalentId = loginSeller.WxappId;
                     if (string.IsNullOrEmpty(from))
                         from = "/";
                     return Redirect(from);
@@ -79,13 +80,10 @@ namespace YoShop.Controllers
             //    return No("验证码错误");
             //}
             //HttpContext.Session.Remove("valid"); //验证成功就销毁验证码Session，非常重要
-
             if (string.IsNullOrEmpty(request.UserName.Trim()) || string.IsNullOrEmpty(request.Password.Trim()))
-            {
                 return No("用户名或密码不能为空");
-            }
             var encryptPassword = request.Password.Md5Encrypt();
-            var loginSeller = _fsql.Select<StoreUser>().Where(request.UserName, encryptPassword).ToOneAsync();
+            var loginSeller = await _fsql.Select<StoreUser>().Where(l => l.UserName == request.UserName && l.Password == encryptPassword).ToOneAsync();
             if (loginSeller != null)
             {
                 HttpContext.Session.Set(SessionConfig.SellerInfo, loginSeller.Mapper<StoreUserDto>());
@@ -98,6 +96,7 @@ namespace YoShop.Controllers
                 //初始化系统设置参数
                 var settings = await _fsql.Select<Setting>().ToListAsync();
                 GlobalConfig.SystemSettings = settings.ToDictionary(s => s.Key, s => JObject.Parse(s.Values));
+                GlobalConfig.TalentId = loginSeller.WxappId;
                 return YesRedirect("登录成功！", string.IsNullOrEmpty(refer) ? "/" : refer);
             }
             return No("用户名或密码错误");

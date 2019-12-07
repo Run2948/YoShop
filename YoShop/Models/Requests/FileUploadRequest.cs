@@ -13,26 +13,26 @@ namespace YoShop.Models.Requests
         /// <summary>
         /// 上传Id
         /// </summary>
-        public string id { get; set; }
+        public string Id { get; set; }
         /// <summary>
         /// 上传文件名
         /// </summary>
-        public string name { get; set; }
+        public string Name { get; set; }
         /// <summary>
         /// 文件类型
         /// </summary>
-        public string type { get; set; }
+        public string Type { get; set; }
         /// <summary>
         /// 文件分组
         /// </summary>
-        public uint group_id { get; set; }
+        public uint GroupId { get; set; }
         /// <summary>
         /// 上传时间
         /// </summary>
-        public DateTime lastModifiedDate { get; set; }
+        public DateTime LastModifiedDate { get; set; }
         /// <summary>
         /// 上传文件大小
         /// </summary>
-        public uint size { get; set; }
+        public uint Size { get; set; }
     }
 }
