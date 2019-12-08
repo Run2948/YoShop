@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Masuit.Tools.Logging;
 using Microsoft.AspNetCore.Mvc;
 using YoShop.Extensions;
+using YoShop.Extensions.Common;
 using YoShop.Models;
 
 namespace YoShop.Controllers
@@ -23,7 +24,7 @@ namespace YoShop.Controllers
         [HttpGet, Route("/wxapp/setting")]
         public async Task<IActionResult> Setting()
         {
-            var wxapp = await _fsql.Select<Wxapp>().ToOneAsync() ?? new Wxapp();
+            var wxapp = await _fsql.Select<Wxapp>().Where(l => l.WxappId == GlobalConfig.TalentId).ToOneAsync() ?? new Wxapp();
             return View(wxapp);
         }
 
@@ -32,7 +33,7 @@ namespace YoShop.Controllers
         {
             try
             {
-                var wxapp = await _fsql.Select<Wxapp>().ToOneAsync() ?? new Wxapp();
+                var wxapp = await _fsql.Select<Wxapp>().Where(l => l.WxappId == GlobalConfig.TalentId).ToOneAsync() ?? new Wxapp();
                 wxapp.AppId = model.AppId;
                 wxapp.AppSecret = model.AppSecret;
                 wxapp.MchId = model.MchId;
@@ -48,6 +49,7 @@ namespace YoShop.Controllers
                     wxapp.WxappId = GetSellerSession().WxappId;
                     await _fsql.Update<Wxapp>().SetSource(wxapp).ExecuteAffrowsAsync();
                 }
+                GlobalConfig.WxappConfig = wxapp.Mapper<WxappConfig>();
             }
             catch (Exception e)
             {

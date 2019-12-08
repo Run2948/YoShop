@@ -175,6 +175,8 @@ namespace YoShop
                 GlobalConfig.TalentId = 10001;
                 var settings = Fsql.Select<Setting>().ToList();
                 GlobalConfig.SystemSettings = settings.ToDictionary(s => s.Key, s => JObject.Parse(s.Values));
+//                var wxapp = Fsql.Select<Wxapp>().Where(l => l.WxappId == GlobalConfig.TalentId).ToOneAsync();
+//                GlobalConfig.WxappConfig = wxapp.Mapper<WxappConfig>();
             }
             //配置跨域
             app.UseCors(builder =>
@@ -184,17 +186,20 @@ namespace YoShop
                 builder.AllowAnyOrigin();
                 builder.AllowCredentials();
             });
-            //            启动Response缓存
+            // 启动Response缓存
             app.UseResponseCaching();
-
             //配置默认路由
-            app.UseMvcWithDefaultRoute();
-            //            app.UseMvc(routes =>
-            //            {
-            //                routes.MapRoute(
-            //                    name: "default",
-            //                    template: "{controller=Home}/{action=Index}/{id?}");
-            //            });
+            // app.UseMvcWithDefaultRoute();
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+
+                routes.MapRoute(
+                    name: "area",
+                    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+            });
         }
     }
 }

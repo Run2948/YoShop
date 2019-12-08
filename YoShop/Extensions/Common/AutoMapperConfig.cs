@@ -116,6 +116,8 @@ namespace YoShop.Extensions.Common
                     .ForMember(dst => dst.DeliveryTime, opt => { opt.MapFrom(src => src.DeliveryTime.ConvertToTimeStamp()); })
                     .ForMember(dst => dst.CreateTime, opt => { opt.MapFrom(src => src.CreateTime.ConvertToTimeStamp()); })
                     .ForMember(dst => dst.UpdateTime, opt => { opt.MapFrom(src => src.UpdateTime.ConvertToTimeStamp()); });
+
+                m.CreateMap<Wxapp, WxappConfig>();
             });
         }
     }

@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using FreeSql;
 using Masuit.Tools.Logging;
 using Microsoft.AspNetCore.Mvc;
-using Remotion.Linq.Parsing.Structure.IntermediateModel;
 using YoShop.Extensions;
 using YoShop.Extensions.Common;
 using YoShop.Models;
@@ -111,6 +109,8 @@ namespace YoShop.Controllers
 
         #endregion
 
+        #region 订单详情
+
         /// <summary>
         /// 订单详情
         /// </summary>
@@ -131,6 +131,10 @@ namespace YoShop.Controllers
             order.OrderAddress = orderAddress;
             return View(order.Mapper<OrderDto>());
         }
+
+        #endregion
+
+        #region 确认发货
 
         /// <summary>
         /// 确认发货
@@ -161,6 +165,8 @@ namespace YoShop.Controllers
             return YesRedirect("发货成功！", "/order/receipt_list");
         }
 
+
+        #endregion
 
         private ISelect<Order> GetOrderList(uint payStatus = 0, uint deliveryStatus = 0, uint receiptStatus = 0, uint orderStatus = 0)
         {

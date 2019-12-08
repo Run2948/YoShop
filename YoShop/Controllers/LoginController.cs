@@ -55,9 +55,11 @@ namespace YoShop.Controllers
                     Response.Cookies.Append("seller_password", Request.Cookies["seller_password"], new CookieOptions() { Expires = DateTime.Now.AddDays(7) });
                     HttpContext.Session.Set(SessionConfig.SellerInfo, loginSeller.Mapper<StoreUserDto>());
                     //初始化系统设置参数
+                    GlobalConfig.TalentId = loginSeller.WxappId;
                     var settings = await _fsql.Select<Setting>().ToListAsync();
                     GlobalConfig.SystemSettings = settings.ToDictionary(s => s.Key, s => JObject.Parse(s.Values));
-                    GlobalConfig.TalentId = loginSeller.WxappId;
+                    var wxapp = await _fsql.Select<Wxapp>().Where(l => l.WxappId == GlobalConfig.TalentId).ToOneAsync();
+                    GlobalConfig.WxappConfig = wxapp.Mapper<WxappConfig>();
                     if (string.IsNullOrEmpty(from))
                         from = "/";
                     return Redirect(from);
@@ -94,9 +96,11 @@ namespace YoShop.Controllers
                 }
                 string refer = Request.Cookies["refer"];
                 //初始化系统设置参数
+                GlobalConfig.TalentId = loginSeller.WxappId;
                 var settings = await _fsql.Select<Setting>().ToListAsync();
                 GlobalConfig.SystemSettings = settings.ToDictionary(s => s.Key, s => JObject.Parse(s.Values));
-                GlobalConfig.TalentId = loginSeller.WxappId;
+                var wxapp = await _fsql.Select<Wxapp>().Where(l => l.WxappId == GlobalConfig.TalentId).ToOneAsync();
+                GlobalConfig.WxappConfig = wxapp.Mapper<WxappConfig>();
                 return YesRedirect("登录成功！", string.IsNullOrEmpty(refer) ? "/" : refer);
             }
             return No("用户名或密码错误");

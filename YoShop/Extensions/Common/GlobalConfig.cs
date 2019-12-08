@@ -6,6 +6,7 @@ using Masuit.Tools;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json.Linq;
+using YoShop.Models;
 
 namespace YoShop.Extensions.Common
 {
@@ -35,7 +36,7 @@ namespace YoShop.Extensions.Common
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static T ToEnum<T>(this object source) where T : Enum => (T)Enum.ToObject(typeof(T),source);
+        public static T ToEnum<T>(this object source) where T : Enum => (T)Enum.ToObject(typeof(T), source);
 
         /// <summary>
         /// 网站启动时间
@@ -46,6 +47,11 @@ namespace YoShop.Extensions.Common
         /// 网站租户Id
         /// </summary>
         public static uint TalentId { get; set; }
+
+        /// <summary>
+        /// 小程序配置
+        /// </summary>
+        public static WxappConfig WxappConfig { get; set; }
 
         /// <summary>
         /// 访问量

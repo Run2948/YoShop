@@ -50,7 +50,7 @@ namespace YoShop.Controllers
         /// <param name="data">数据</param>
         /// <param name="url">跳转地址</param>
         /// <returns></returns>
-        protected ContentResult Yes(string msg = "Sucess", object data = null, string url = null)
+        protected ContentResult Yes(string msg = "success", object data = null, string url = null)
         {
             return Build(code: 1, msg: msg, data: data, url: url);
         }
@@ -73,7 +73,7 @@ namespace YoShop.Controllers
         /// <returns></returns>
         protected ContentResult YesResult(object data)
         {
-            return Yes(msg: "Success", data: data);
+            return Yes(msg: "success", data: data);
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace YoShop.Controllers
         /// <returns></returns>
         protected ContentResult YesRedirect(string url)
         {
-            return Yes(msg: "Success", url: url);
+            return Yes(msg: "success", url: url);
         }
 
         /// <summary>
@@ -104,7 +104,7 @@ namespace YoShop.Controllers
         /// <param name="data">数据</param>
         /// <param name="url">跳转地址</param>
         /// <returns></returns>
-        protected ContentResult No(string msg = "Failure", object data = null, string url = null)
+        protected ContentResult No(string msg = "failure", object data = null, string url = null)
         {
             return Build(code: 0, msg: msg, data: data, url: url);
         }
@@ -116,7 +116,7 @@ namespace YoShop.Controllers
         /// <returns></returns>
         protected ContentResult NoRedirect(string url)
         {
-            return Build(code: 0, msg: "Failure", url: url);
+            return Build(code: 0, msg: "failure", url: url);
         }
 
         #endregion
@@ -153,7 +153,7 @@ namespace YoShop.Controllers
         /// <returns></returns>
         protected ResultInfo SuccResp(object data)
         {
-            return InfoResp(1, "Success", data);
+            return InfoResp(1, "success", data);
         }
 
         /// <summary>
