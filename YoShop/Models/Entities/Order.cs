@@ -11,23 +11,29 @@ namespace YoShop.Models
         [JsonProperty, Column(Name = "order_id", DbType = "int(11) unsigned", IsIdentity = true, IsPrimary = true)]
         public uint OrderId { get; set; }
 
+        [Navigate(nameof(OrderId))]
+        public virtual List<OrderGoods> OrderGoods { get; set; }
+
+        [Navigate(nameof(OrderId))]
+        public virtual OrderAddress OrderAddress { get; set; }
+
         [JsonProperty, Column(Name = "order_no", DbType = "varchar(20)")]
         public string OrderNo { get; set; }
 
         [JsonProperty, Column(Name = "order_status")]
-        public OrderStatus OrderStatus { get; set; }
+        public byte OrderStatus { get; set; }
 
         [JsonProperty, Column(Name = "pay_price", DbType = "decimal(10,2) unsigned")]
         public decimal PayPrice { get; set; }
 
         [JsonProperty, Column(Name = "pay_status")]
-        public PayStatus PayStatus { get; set; }
+        public byte PayStatus { get; set; }
 
         [JsonProperty, Column(Name = "pay_time", DbType = "int(11) unsigned")]
         public uint PayTime { get; set; }
 
         [JsonProperty, Column(Name = "receipt_status")]
-        public ReceiptStatus ReceiptStatus { get; set; }
+        public byte ReceiptStatus { get; set; }
 
         [JsonProperty, Column(Name = "receipt_time", DbType = "int(11) unsigned")]
         public uint ReceiptTime { get; set; }
@@ -41,8 +47,11 @@ namespace YoShop.Models
         [JsonProperty, Column(Name = "user_id", DbType = "int(11) unsigned")]
         public uint UserId { get; set; }
 
+        [Navigate(nameof(UserId))]
+        public virtual User User { get; set; }
+
         [JsonProperty, Column(Name = "delivery_status")]
-        public DeliveryStatus DeliveryStatus { get; set; }
+        public byte DeliveryStatus { get; set; }
 
         [JsonProperty, Column(Name = "delivery_time", DbType = "int(11) unsigned")]
         public uint DeliveryTime { get; set; }

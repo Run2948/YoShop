@@ -5,7 +5,7 @@ using FreeSql.DataAnnotations;
 
 namespace YoShop.Models
 {
-    [JsonObject(MemberSerialization.OptIn), Table(Name = "wxapp_user")]
+    [JsonObject(MemberSerialization.OptIn), Table(Name = "user")]
     public partial class User : WxappEntity
     {
         [JsonProperty, Column(Name = "user_id", DbType = "int(11) unsigned", IsIdentity = true,IsPrimary = true)]

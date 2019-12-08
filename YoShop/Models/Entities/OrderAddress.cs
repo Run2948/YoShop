@@ -23,11 +23,20 @@ namespace YoShop.Models
         [JsonProperty, Column(Name = "province_id", DbType = "int(11) unsigned")]
         public uint ProvinceId { get; set; }
 
+        [Navigate(nameof(ProvinceId))]
+        public virtual Region Province { get; set; }
+
         [JsonProperty, Column(Name = "city_id", DbType = "int(11) unsigned")]
         public uint CityId { get; set; }
 
+        [Navigate(nameof(CityId))]
+        public virtual Region City { get; set; }
+
         [JsonProperty, Column(Name = "region_id", DbType = "int(11) unsigned")]
         public uint RegionId { get; set; }
+
+        [Navigate(nameof(RegionId))]
+        public virtual Region Region { get; set; }
 
         [JsonProperty, Column(Name = "detail")]
         public string Detail { get; set; }

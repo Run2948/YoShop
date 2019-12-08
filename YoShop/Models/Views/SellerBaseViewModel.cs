@@ -55,4 +55,13 @@ namespace YoShop.Models.Views
 
         }
     }
+
+    public class OrderListViewModel : SellerBaseViewModel<OrderDto>
+    {
+        public OrderListViewModel(List<OrderDto> list, long total)
+            : base(list, total)
+        {
+
+        }
+    }
 }

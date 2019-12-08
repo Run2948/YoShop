@@ -57,22 +57,27 @@ namespace YoShop.Models
 
     public enum OrderStatus
     {
-
+        新订单 = 10,
+        已取消 = 20,
+        已完成 = 30
     }
 
     public enum PayStatus
     {
-
+        待付款 = 10,
+        已付款 = 20
     }
 
     public enum ReceiptStatus
     {
-
+        待收货 = 10,
+        已收货 = 20
     }
 
     public enum DeliveryStatus
     {
-
+        待发货 = 10,
+        已发货 = 20
     }
 
     public enum DeliveryMethod

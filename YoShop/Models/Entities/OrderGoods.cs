@@ -32,6 +32,9 @@ namespace YoShop.Models
         [JsonProperty, Column(Name = "image_id", DbType = "int(11) unsigned")]
         public uint ImageId { get; set; }
 
+        [Navigate(nameof(ImageId))]
+        public virtual UploadFile GoodsImage { get; set; }
+
         [JsonProperty, Column(Name = "line_price", DbType = "decimal(10,2) unsigned")]
         public decimal LinePrice { get; set; }
 

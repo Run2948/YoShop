@@ -8,7 +8,7 @@ namespace YoShop.Models
     [JsonObject(MemberSerialization.OptIn), Table(Name = "goods_spec")]
     public partial class GoodsSpec : WxappEntity
     {
-        [JsonProperty, Column(Name = "goods_spec_id", DbType = "int(11) unsigned", IsIdentity = true)]
+        [JsonProperty, Column(Name = "goods_spec_id", DbType = "int(11) unsigned", IsIdentity = true,IsPrimary = true)]
         public uint GoodsSpecId { get; set; }
 
         [JsonProperty, Column(Name = "goods_id", DbType = "int(11) unsigned")]

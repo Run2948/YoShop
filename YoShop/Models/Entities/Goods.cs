@@ -10,6 +10,8 @@ namespace YoShop.Models
     {
         [JsonProperty, Column(Name = "goods_id", DbType = "int(11) unsigned", IsIdentity = true, IsPrimary = true)]
         public uint GoodsId { get; set; }
+
+        [Navigate(nameof(GoodsId))]
         public virtual List<GoodsImage> GoodsImages { get; set; }
 
         [JsonProperty, Column(Name = "goods_name")]

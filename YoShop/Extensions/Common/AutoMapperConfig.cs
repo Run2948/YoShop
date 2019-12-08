@@ -95,6 +95,27 @@ namespace YoShop.Extensions.Common
                     .ForMember(dst => dst.CreateTime, opt => { opt.MapFrom(src => src.CreateTime.ConvertToTimeStamp()); })
                     .ForMember(dst => dst.UpdateTime, opt => { opt.MapFrom(src => src.UpdateTime.ConvertToTimeStamp()); });
 
+                m.CreateMap<Order, OrderDto>()
+                    .ForMember(dst => dst.OrderStatus, opt => { opt.MapFrom(src => src.OrderStatus.ToEnum<OrderStatus>()); })
+                    .ForMember(dst => dst.PayStatus, opt => { opt.MapFrom(src => src.PayStatus.ToEnum<PayStatus>()); })
+                    .ForMember(dst => dst.ReceiptStatus, opt => { opt.MapFrom(src => src.ReceiptStatus.ToEnum<ReceiptStatus>()); })
+                    .ForMember(dst => dst.DeliveryStatus, opt => { opt.MapFrom(src => src.DeliveryStatus.ToEnum<DeliveryStatus>()); })
+                    .ForMember(dst => dst.PayTime, opt => { opt.MapFrom(src => src.CreateTime.ConvertToDateTime()); })
+                    .ForMember(dst => dst.ReceiptTime, opt => { opt.MapFrom(src => src.CreateTime.ConvertToDateTime()); })
+                    .ForMember(dst => dst.DeliveryTime, opt => { opt.MapFrom(src => src.CreateTime.ConvertToDateTime()); })
+                    .ForMember(dst => dst.CreateTime, opt => { opt.MapFrom(src => src.CreateTime.ConvertToDateTime()); })
+                    .ForMember(dst => dst.UpdateTime, opt => { opt.MapFrom(src => src.UpdateTime.ConvertToDateTime()); });
+
+                m.CreateMap<OrderDto, Order>()
+                    .ForMember(dst => dst.OrderStatus, opt => { opt.MapFrom(src => src.OrderStatus.ToByte()); })
+                    .ForMember(dst => dst.PayStatus, opt => { opt.MapFrom(src => src.PayStatus.ToByte()); })
+                    .ForMember(dst => dst.ReceiptStatus, opt => { opt.MapFrom(src => src.ReceiptStatus.ToByte()); })
+                    .ForMember(dst => dst.DeliveryStatus, opt => { opt.MapFrom(src => src.DeliveryStatus.ToByte()); })
+                    .ForMember(dst => dst.PayTime, opt => { opt.MapFrom(src => src.PayTime.ConvertToTimeStamp()); })
+                    .ForMember(dst => dst.ReceiptTime, opt => { opt.MapFrom(src => src.ReceiptTime.ConvertToTimeStamp()); })
+                    .ForMember(dst => dst.DeliveryTime, opt => { opt.MapFrom(src => src.DeliveryTime.ConvertToTimeStamp()); })
+                    .ForMember(dst => dst.CreateTime, opt => { opt.MapFrom(src => src.CreateTime.ConvertToTimeStamp()); })
+                    .ForMember(dst => dst.UpdateTime, opt => { opt.MapFrom(src => src.UpdateTime.ConvertToTimeStamp()); });
             });
         }
     }
