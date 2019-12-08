@@ -121,9 +121,14 @@ namespace YoShop.Controllers
         {
             var order = await _fsql.Select<Order>().Where(l => l.OrderId == id)
                 .IncludeMany(l => l.OrderGoods, then => then.Include(i => i.GoodsImage))
-                .Include(l => l.OrderAddress)
                 .Include(l => l.User)
                 .ToOneAsync();
+            var orderAddress = await _fsql.Select<OrderAddress>().Where(l => l.OrderId == id)
+                .Include(l => l.Province)
+                .Include(l => l.City)
+                .Include(l => l.Region)
+                .ToOneAsync();
+            order.OrderAddress = orderAddress;
             return View(order.Mapper<OrderDto>());
         }
 

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Masuit.Tools.Logging;
 using Microsoft.AspNetCore.Mvc;
@@ -47,17 +45,17 @@ namespace YoShop.Controllers
         /// <summary>
         /// 添加商品分类
         /// </summary>
-        /// <param name="viewModel"></param>
+        /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost, Route("/goods.category/add"), ValidateAntiForgeryToken]
-        public async Task<IActionResult> Add(CategoryDto viewModel)
+        public async Task<IActionResult> Add(CategoryDto request)
         {
-            viewModel.WxappId = GetSellerSession().WxappId;
-            viewModel.CreateTime = DateTime.Now;
-            viewModel.UpdateTime = DateTime.Now;
+            request.WxappId = GetSellerSession().WxappId;
+            request.CreateTime = DateTime.Now;
+            request.UpdateTime = DateTime.Now;
             try
             {
-                var model = viewModel.Mapper<Category>();
+                var model = request.Mapper<Category>();
                 await _fsql.Insert<Category>().AppendData(model).ExecuteAffrowsAsync();
             }
             catch (Exception e)
@@ -77,7 +75,7 @@ namespace YoShop.Controllers
         [HttpGet, Route("/goods.category/edit/categoryId/{id}")]
         public async Task<IActionResult> Edit(uint id)
         {
-            var model = await _fsql.Select<Category>().Where(c => c.CategoryId == id).Include(c => c.UploadFile).ToOneAsync();
+            var model = await _fsql.Select<Category>().Where(c => c.CategoryId == id).Include(c => c.CategoryImage).ToOneAsync();
             if (model == null) return NoOrDeleted();
             ViewData["first"] = await _fsql.Select<Category>().Where(l => l.ParentId == 0).ToListAsync<CategorySelectDto>();
             return View(model.Mapper<CategoryDto>());
@@ -86,20 +84,20 @@ namespace YoShop.Controllers
         /// <summary>
         /// 编辑商品分类
         /// </summary>
-        /// <param name="viewModel"></param>
+        /// <param name="request"></param>
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpPost, Route("/goods.category/edit/categoryId/{id}"), ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(CategoryDto viewModel, uint id)
+        public async Task<IActionResult> Edit(CategoryDto request, uint id)
         {
             var model = await _fsql.Select<Category>().Where(c => c.CategoryId == id).ToOneAsync();
             if (model == null) return NoOrDeleted();
             try
             {
-                model.Name = viewModel.Name;
-                model.ParentId = viewModel.ParentId;
-                model.Sort = viewModel.Sort;
-                model.ImageId = viewModel.ImageId;
+                model.Name = request.Name;
+                model.ParentId = request.ParentId;
+                model.Sort = request.Sort;
+                model.ImageId = request.ImageId;
                 model.UpdateTime = DateTime.Now.ConvertToTimeStamp();
                 await _fsql.Update<Category>().SetSource(model).ExecuteAffrowsAsync();
             }

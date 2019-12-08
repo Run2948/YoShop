@@ -13,7 +13,7 @@ namespace YoShop.Models
 
         public uint ImageId { get; set; }
 
-        public UploadFile UploadFile { get; set; }
+        public UploadFile CategoryImage { get; set; }
 
         public uint Sort { get; set; }
 
