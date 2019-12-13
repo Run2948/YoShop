@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO.Compression;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using System.Threading.Tasks;
@@ -28,6 +29,7 @@ using Newtonsoft.Json.Serialization;
 using YoShop.Extensions;
 using YoShop.Extensions.Common;
 using YoShop.Models;
+using YoShop.WeChat;
 using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
 
 namespace YoShop
@@ -83,8 +85,24 @@ namespace YoShop
                     p.AllowCredentials();
                 });
             });
-            //注入HttpClient
+            /** .NET Core 中正确使用 HttpClient 的姿势
+             * https://www.cnblogs.com/willick/p/net-core-httpclient.html
+             */
+            // 注入HttpClient
             services.AddHttpClient();
+            services.AddHttpClient<WxHttpClient>();
+            /** .NET Core 中正确使用 MemoryCache 的姿势
+             * https://www.cnblogs.com/gygg/p/11275417.html
+             */
+            services.AddMemoryCache(options =>
+            {
+                // 设置缓存压缩比为 2%
+                options.CompactionPercentage = 0.02D;
+                //每 5 分钟进行一次过期缓存的扫描
+                options.ExpirationScanFrequency = TimeSpan.FromMinutes(5);
+                // 最大缓存空间大小限制为 1024
+                options.SizeLimit = 1024;
+            });
             //注入静态HttpContext
             services.AddHttpContextAccessor();
             // HttpContextAccessor 默认实现了IHttpContextAccessor接口，它简化了HttpContext的操作
@@ -175,8 +193,8 @@ namespace YoShop
                 GlobalConfig.TalentId = 10001;
                 var settings = Fsql.Select<Setting>().ToList();
                 GlobalConfig.SystemSettings = settings.ToDictionary(s => s.Key, s => JObject.Parse(s.Values));
-//                var wxapp = Fsql.Select<Wxapp>().Where(l => l.WxappId == GlobalConfig.TalentId).ToOneAsync();
-//                GlobalConfig.WxappConfig = wxapp.Mapper<WxappConfig>();
+                //                var wxapp = Fsql.Select<Wxapp>().Where(l => l.WxappId == GlobalConfig.TalentId).ToOneAsync();
+                //                GlobalConfig.WxappConfig = wxapp.Mapper<WxappConfig>();
             }
             //配置跨域
             app.UseCors(builder =>

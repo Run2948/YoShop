@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using YoShop.Controllers;
+using YoShop.Extensions.Common;
 using YoShop.Models;
 
 namespace YoShop.Areas.Api.Controllers
@@ -23,7 +24,7 @@ namespace YoShop.Areas.Api.Controllers
         /// <returns></returns>
         public async Task<IActionResult> Base()
         {
-            var wxapp = await _fsql.Select<Wxapp>().ToOneAsync();
+            var wxapp = await _fsql.Select<Wxapp>().Where(l => l.WxappId == GlobalConfig.TalentId).ToOneAsync();
             return YesResult(wxapp);
         }
 

@@ -119,6 +119,18 @@ namespace YoShop.Controllers
             return Build(code: 0, msg: "failure", url: url);
         }
 
+        /// <summary>
+        /// 返回特定失败状态、消息、数据对象和跳转地址
+        /// </summary>
+        /// <param name="msg">消息</param>
+        /// <param name="data">数据</param>
+        /// <param name="url">跳转地址</param>
+        /// <returns></returns>
+        protected ContentResult Fail(string msg = "failure", object data = null, string url = null)
+        {
+            return Build(-1, msg, data, url);
+        }
+
         #endregion
 
         #region 通用返回ResultInfo的封装

@@ -131,7 +131,7 @@ namespace YoShop.Extensions
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static string GetMd5(string source)
+        public static string GetMd5(this string source)
         {
             using (MD5 md5 = new MD5CryptoServiceProvider())
             {

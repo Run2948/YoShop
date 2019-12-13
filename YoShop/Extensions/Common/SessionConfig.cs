@@ -7,17 +7,13 @@ namespace YoShop.Extensions.Common
 {
     public class SessionConfig
     {
-//        /// <summary>
-//        /// 管理员SessionKey
-//        /// </summary>
-//        public const string AdminInfo = "AdminSession";
+        /// <summary>
+        /// 管理员SessionKey
+        /// </summary>
+        public const string AdminInfo = "AdminSession";
         /// <summary>
         /// 卖家SessionKey
         /// </summary>
         public const string SellerInfo = "SellerSession";
-        /// <summary>
-        /// 用户SessionKey
-        /// </summary>
-        public const string UserInfo = "UserSession";
     }
 }

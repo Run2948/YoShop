@@ -13,7 +13,7 @@ namespace YoShop.Extensions.Common
     public static class GlobalConfig
     {
         /// <summary>
-        ///  管理员密码密钥
+        ///  密码密钥
         /// </summary>
         public const string EncryptKey = "yoshop_salt_SmTRx";
 
