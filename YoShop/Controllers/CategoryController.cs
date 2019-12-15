@@ -75,7 +75,7 @@ namespace YoShop.Controllers
         [HttpGet, Route("/goods.category/edit/categoryId/{id}")]
         public async Task<IActionResult> Edit(uint id)
         {
-            var model = await _fsql.Select<Category>().Where(c => c.CategoryId == id).Include(c => c.CategoryImage).ToOneAsync();
+            var model = await _fsql.Select<Category>().Where(c => c.CategoryId == id).Include(c => c.Image).ToOneAsync();
             if (model == null) return NoOrDeleted();
             ViewData["first"] = await _fsql.Select<Category>().Where(l => l.ParentId == 0).ToListAsync<CategorySelectDto>();
             return View(model.Mapper<CategoryDto>());

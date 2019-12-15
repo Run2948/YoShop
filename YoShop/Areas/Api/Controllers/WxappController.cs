@@ -9,6 +9,7 @@ using YoShop.Models;
 
 namespace YoShop.Areas.Api.Controllers
 {
+    [Area("api")]
     public class WxappController : BaseController
     {
         private readonly IFreeSql _fsql;
@@ -21,20 +22,23 @@ namespace YoShop.Areas.Api.Controllers
         /// <summary>
         /// 基础信息
         /// </summary>
+        /// <param name="wxappId"></param>
         /// <returns></returns>
-        public async Task<IActionResult> Base()
+        public async Task<IActionResult> Base(uint wxappId)
         {
-            var wxapp = await _fsql.Select<Wxapp>().Where(l => l.WxappId == GlobalConfig.TalentId).ToOneAsync();
-            return YesResult(wxapp);
+            var wxapp = await _fsql.Select<Wxapp>().Where(l => l.WxappId == wxappId).ToOneAsync();
+            var navbar = await _fsql.Select<WxappNavbar>().Where(l => l.WxappId == wxappId).ToOneAsync();
+            return YesResult(new { wxapp, navbar });
         }
 
         /// <summary>
         /// 帮助中心
         /// </summary>
+        /// <param name="wxappId"></param>
         /// <returns></returns>
-        public async Task<IActionResult> Help()
+        public async Task<IActionResult> Help(uint wxappId)
         {
-            var list = await _fsql.Select<WxappHelp>().OrderByDescending(l => l.Sort).ToListAsync();
+            var list = await _fsql.Select<WxappHelp>().Where(l=>l.WxappId == wxappId).OrderByDescending(l => l.Sort).ToListAsync();
             return YesResult(list);
         }
 

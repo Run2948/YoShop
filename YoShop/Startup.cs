@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Rewrite;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.WebEncoders;
 using Microsoft.Net.Http.Headers;
@@ -75,14 +76,18 @@ namespace YoShop
             //读取应用程序配置
             Configuration.GetSectionValue<AppConfig>();
             //配置跨域
-            services.AddCors(opt =>
+            services.AddCors(options =>
             {
-                opt.AddDefaultPolicy(p =>
+                options.AddPolicy("LimitRequests", policy =>
                 {
-                    p.AllowAnyHeader();
-                    p.AllowAnyMethod();
-                    p.AllowAnyOrigin();
-                    p.AllowCredentials();
+                    // 支持多个域名端口，注意端口号后不要带/斜杆
+                    // 注意，http://127.0.0.1:1818 和 http://localhost:1818 是不一样的，尽量写两个
+                    policy
+                        // 不支持向所有域名开放， AllowAnyOrigin 不可用
+//                        .WithOrigins(AppSettings.app(new string[] { "Startup", "Cors", "IPs" }).Split(','))
+                        .AllowAnyHeader()//允许任何头
+                        .AllowAnyMethod()//允许任何方式
+                        .AllowCredentials();//允许cookie
                 });
             });
             /** .NET Core 中正确使用 HttpClient 的姿势
@@ -140,12 +145,14 @@ namespace YoShop
                 opt.Cookie.HttpOnly = true;
             });
             services.AddSingleton(Fsql);
-            services.AddMvc().AddJsonOptions(opt =>
+            services.AddControllersWithViews();
+            services.AddRazorPages();
+            services.AddMvcCore().AddNewtonsoftJson(opt =>
             {
                 opt.SerializerSettings.ContractResolver = new DefaultContractResolver();
                 opt.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
                 opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
             //解决razor视图中中文被编码的问题
             services.Configure<WebEncoderOptions>(options =>
             {
@@ -154,7 +161,7 @@ namespace YoShop
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -166,7 +173,10 @@ namespace YoShop
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 //                app.UseHsts();
             }
-
+            //配置跨域
+            app.UseCors("LimitRequests");
+            // 启动Response缓存
+            app.UseResponseCaching();
             app.UseResponseCompression();
             // URL重写
             app.UseRewriter(new RewriteOptions().AddRedirectToNonWww());
@@ -196,27 +206,21 @@ namespace YoShop
                 //                var wxapp = Fsql.Select<Wxapp>().Where(l => l.WxappId == GlobalConfig.TalentId).ToOneAsync();
                 //                GlobalConfig.WxappConfig = wxapp.Mapper<WxappConfig>();
             }
-            //配置跨域
-            app.UseCors(builder =>
+            // 返回错误码
+            app.UseStatusCodePages();//把错误码返回前台，比如是404
+            app.UseRouting();
+            //配置路由
+            app.UseEndpoints(endpoints =>
             {
-                builder.AllowAnyHeader();
-                builder.AllowAnyMethod();
-                builder.AllowAnyOrigin();
-                builder.AllowCredentials();
-            });
-            // 启动Response缓存
-            app.UseResponseCaching();
-            //配置默认路由
-            // app.UseMvcWithDefaultRoute();
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
+                endpoints.MapControllerRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
 
-                routes.MapRoute(
+                endpoints.MapControllerRoute(
                     name: "area",
-                    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapRazorPages();
             });
         }
     }

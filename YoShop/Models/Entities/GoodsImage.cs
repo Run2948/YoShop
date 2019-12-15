@@ -8,16 +8,16 @@ namespace YoShop.Models
     [JsonObject(MemberSerialization.OptIn), Table(Name = "goods_image")]
     public partial class GoodsImage : WxappEntity
     {
-        [JsonProperty, Column(Name = "id", DbType = "int(11) unsigned", IsIdentity = true, IsPrimary = true)]
+        [JsonProperty("id"), Column(Name = "id", DbType = "int(11) unsigned", IsIdentity = true, IsPrimary = true)]
         public uint Id { get; set; }
 
-        [JsonProperty, Column(Name = "goods_id", DbType = "int(11) unsigned")]
+        [JsonProperty("goods_id"), Column(Name = "goods_id", DbType = "int(11) unsigned")]
         public uint GoodsId { get; set; }
 
-        [JsonProperty, Column(Name = "image_id", DbType = "int(11) unsigned")]
+        [JsonProperty("image_id"), Column(Name = "image_id", DbType = "int(11) unsigned")]
         public uint ImageId { get; set; }
 
-        [Navigate(nameof(ImageId))]
+        [Navigate(nameof(ImageId)),JsonProperty("file")]
         public virtual UploadFile UploadFile { get; set; }
     }
 }

@@ -7,8 +7,6 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 using YoShop.Controllers;
-using YoShop.Extensions;
-using YoShop.Extensions.Common;
 using YoShop.WeChat;
 
 namespace YoShop.Areas.Api.Controllers
@@ -26,13 +24,13 @@ namespace YoShop.Areas.Api.Controllers
         /// <param name="context">The action executing context.</param>
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            WxappId = context.ActionArguments["wxappId"]?.ToString();
+            WxappId = context.HttpContext.Request.Headers["wxappId"].FirstOrDefault() ?? context.HttpContext.Request.Query["wxappId"].FirstOrDefault() ?? context.HttpContext.Request.Form["wxappId"].FirstOrDefault();
+            Token = context.HttpContext.Request.Headers["token"].FirstOrDefault() ?? context.HttpContext.Request.Query["token"].FirstOrDefault() ?? context.HttpContext.Request.Form["token"].FirstOrDefault();
             if (string.IsNullOrEmpty(WxappId))
             {
                 context.Result = No("缺少必要的参数：wxappId");
                 return;
             }
-            Token = context.ActionArguments["token"]?.ToString();
             if (string.IsNullOrEmpty(Token))
             {
                 context.Result = No("缺少必要的参数：token");

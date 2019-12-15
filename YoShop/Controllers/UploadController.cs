@@ -22,7 +22,7 @@ namespace YoShop.Controllers
     [ApiExplorerSettings(IgnoreApi = true)]
     public class UploadController : SellerBaseController
     {
-        private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IWebHostEnvironment _hostingEnvironment;
 
         private readonly IFreeSql _fsql;
 
@@ -31,7 +31,7 @@ namespace YoShop.Controllers
         /// </summary>
         /// <param name="hostingEnvironment"></param>
         /// <param name="fsql"></param>
-        public UploadController(IHostingEnvironment hostingEnvironment, IFreeSql fsql)
+        public UploadController(IWebHostEnvironment hostingEnvironment, IFreeSql fsql)
         {
             _hostingEnvironment = hostingEnvironment;
             _fsql = fsql;
@@ -220,7 +220,7 @@ namespace YoShop.Controllers
                 CreateTime = timestamp,
                 UpdateTime = timestamp
             };
-            long groupId = 0;
+            long groupId;
             try
             {
                 groupId = await _fsql.Insert<UploadGroup>().AppendData(model).ExecuteIdentityAsync();

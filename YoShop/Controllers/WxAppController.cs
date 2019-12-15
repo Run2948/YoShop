@@ -82,6 +82,7 @@ namespace YoShop.Controllers
                 {
                     page.PageType = 10;
                     page.CreateTime = DateTime.Now.ConvertToTimeStamp();
+                    page.WxappId = GetSellerSession().WxappId;
                     await _fsql.Insert<WxappPage>().AppendData(page).ExecuteAffrowsAsync();
                 }
                 else

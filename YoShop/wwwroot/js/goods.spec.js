@@ -2,9 +2,9 @@
 
     // 商品规格数据
     var data = {
-        specAttr: [],
-        specList: []
-    }
+            spec_attr: [],
+            spec_list: []
+        }
 
         // 配置信息
         , setting = {
@@ -92,12 +92,12 @@
                     // 清空输入内容
                     $specNameInput.val('') && $specValueInput.val('');
                     // 记录规格数据
-                    data.specAttr.push({
-                        specId: result.data.specId,
-                        specName: specNameInputValue,
-                        specItems: [{
-                            specValueId: result.data.specValueId,
-                            specValueName: specValueInputValue
+                    data.spec_attr.push({
+                        group_id: result.data.specId,
+                        group_name: specNameInputValue,
+                        spec_items: [{
+                            item_id: result.data.specValueId,
+                            spec_value: specValueInputValue
                         }]
                     });
                     // 渲染规格属性html
@@ -148,9 +148,9 @@
                         return false;
                     }
                     // 记录规格数据
-                    data.specAttr[$specGroup.data('index')].specItems.push({
-                        specValueId: result.data.specValueId,
-                        specValueName: specItemInputValue
+                    data.spec_attr[$specGroup.data('index')].spec_items.push({
+                        item_id: result.data.specValueId,
+                        spec_value: specItemInputValue
                     });
                     // 渲染规格属性html
                     _this.renderHtml();
@@ -168,7 +168,7 @@
                 var index = $(this).parent().parent().attr('data-index');
                 layer.confirm('确定要删除该规则组吗？确认后不可恢复请谨慎操作', function (layerIndex) {
                     // 删除指定规则组
-                    data.specAttr.splice(index, 1);
+                    data.spec_attr.splice(index, 1);
                     // 重新渲染规格属性html
                     _this.renderHtml();
                     layer.close(layerIndex);
@@ -188,7 +188,7 @@
                     , itemIndex = $item.attr('data-item-index');
                 layer.confirm('确定要删除该规则吗？确认后不可恢复请谨慎操作', function (layerIndex) {
                     // 删除指定规则组
-                    data.specAttr[groupIndex].specItems.splice(itemIndex, 1);
+                    data.spec_attr[groupIndex].spec_items.splice(itemIndex, 1);
                     // 重新渲染规格属性html
                     _this.renderHtml();
                     layer.close(layerIndex);
@@ -213,8 +213,8 @@
                     }
                 });
                 if (!$.isEmptyObject(formData)) {
-                    data.specList.forEach(function (item, index) {
-                        data.specList[index].goodsSpec = $.extend({}, data.specList[index].goodsSpec, formData);
+                    data.spec_list.forEach(function (item, index) {
+                        data.spec_list[index].form = $.extend({}, data.spec_list[index].form, formData);
                     });
                     // 渲染商品规格table
                     _this.renderTableHtml();
@@ -236,18 +236,18 @@
          * 渲染表格html
          */
         renderTableHtml: function () {
-            var $specTabel = this.$container.find('.spec-sku-tabel')
-                , $goodsSku = $specTabel.parent();
+            var $specTable = this.$container.find('.spec-sku-tabel')
+                , $goodsSku = $specTable.parent();
             // 商品规格为空：隐藏sku容器
-            if (data.specAttr.length === 0) {
-                $specTabel.empty();
+            if (data.spec_attr.length === 0) {
+                $specTable.empty();
                 $goodsSku.hide();
                 return false;
             }
             // 构建规格组合列表
-            this.buildSpeclist();
+            this.buildSpecList();
             // 渲染table
-            $specTabel.html(template('tpl_spec_table', data));
+            $specTable.html(template('tpl_spec_table', data));
             // 显示sku容器
             $goodsSku.show();
         },
@@ -255,53 +255,53 @@
         /**
          * 构建规格组合列表
          */
-        buildSpeclist: function () {
+        buildSpecList: function () {
             // 规格组合总数 (table行数)
             var totalRow = 1;
-            for (var i = 0; i < data.specAttr.length; i++) {
-                totalRow *= data.specAttr[i].specItems.length;
+            for (var i = 0; i < data.spec_attr.length; i++) {
+                totalRow *= data.spec_attr[i].spec_items.length;
             }
             // 遍历tr 行
-            var specList = [];
+            var spec_list = [];
             for (i = 0; i < totalRow; i++) {
                 var rowData = [], rowCount = 1, specSkuIdAttr = [];
                 // 遍历td 列
-                for (var j = 0; j < data.specAttr.length; j++) {
-                    var specId = data.specAttr[j].specId;
-                    var skuValues = data.specAttr[j].specItems;
+                for (var j = 0; j < data.spec_attr.length; j++) {
+                    var specId = data.spec_attr[j].spec_id;
+                    var skuValues = data.spec_attr[j].spec_items;
                     rowCount *= skuValues.length;
                     var anInterBankNum = (totalRow / rowCount)
                         , point = ((i / anInterBankNum) % skuValues.length);
                     if (0 === (i % anInterBankNum)) {
                         rowData.push({
-                            rowSpan: anInterBankNum,
-                            specId: specId,
-                            specValueId: skuValues[point].specValueId,
-                            specValueName: skuValues[point].specValueName
+                            rowspan: anInterBankNum,
+                            spec_id: specId,
+                            item_id: skuValues[point].item_id,
+                            spec_value: skuValues[point].spec_value
                         });
                     }
-                    specSkuIdAttr.push(skuValues[parseInt(point.toString())].specValueId);
+                    specSkuIdAttr.push(skuValues[parseInt(point.toString())].item_id);
                 }
-                specList.push({
-                    specSkuId: specSkuIdAttr.join('_'),
-                    goodsSpecRels: rowData,
-                    goodsSpec: {}
+                spec_list.push({
+                    spec_sku_id: specSkuIdAttr.join('_'),
+                    rows: rowData,
+                    form: {}
                 });
             }
             // 合并旧sku数据
-            if (data.specList.length > 0 && specList.length > 0) {
-                for (i = 0; i < specList.length; i++) {
-                    var overlap = data.specList.filter(function (val) {
-                        return val.specSkuId === specList[i].specSkuId;
+            if (data.spec_list.length > 0 && spec_list.length > 0) {
+                for (i = 0; i < spec_list.length; i++) {
+                    var overlap = data.spec_list.filter(function (val) {
+                        return val.spec_sku_id === spec_list[i].spec_sku_id;
                     });
-                    if (overlap.length > 0) specList[i].goodsSpec = overlap[0].goodsSpec;
+                    if (overlap.length > 0) spec_list[i].form = overlap[0].form;
                 }
             }
-            data.specList = specList;
+            data.spec_list = spec_list;
         },
 
         /**
-         * 输入规格信息自动同步更新specList
+         * 输入规格信息自动同步更新spec_list
          */
         updateSpecInputEvent: function () {
             var _this = this;
@@ -309,7 +309,7 @@
                 var $this = $(this)
                     , dataType = $this.attr('name')
                     , specIndex = $this.parent().parent().data('index');
-                data.specList[specIndex].goodsSpec[dataType] = $this.val();
+                data.spec_list[specIndex].form[dataType] = $this.val();
             });
         },
 
@@ -325,7 +325,7 @@
          * @returns {boolean}
          */
         isEmptySkuList: function () {
-            return !data.specList.length;
+            return !data.spec_list.length;
         }
 
     };

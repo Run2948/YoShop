@@ -1,0 +1,89 @@
+<view class="container" wx:if="{{ userInfo.user_id > 0 }}">
+  <!-- 用户信息 -->
+  <view class="user">
+    <view class="user-header" style="background-image: url('/images/user-bg.png');">
+      <view class="user-header-cont">
+        <view class="user-header-avatar">
+          <open-data class="" lang="zh_CN" type="userAvatarUrl"></open-data>
+        </view>
+        <open-data class="user-header-cont-name" lang="zh_CN" type="userNickName"></open-data>
+      </view>
+    </view>
+    <!-- 订单导航栏 -->
+    <view class="order-navbar">
+      <form bindsubmit="onTargetOrder" data-type="all" report-submit="true">
+        <button formType="submit" class="btn-normal">
+          <view class="order-navbar-header dis-flex">
+            <text class="f-30">我的订单</text>
+            <view class="dis-flex flex-y-center">
+              <text class="f-24 col-6">全部订单</text>
+              <text class="iconfont icon-xiangyoujiantou user-orderJtou"></text>
+            </view>
+          </view>
+        </button>
+      </form>
+      <view class="order-navbar-footer dis-flex m-top10">
+        <view class="order-navbar-item flex-box">
+          <form bindsubmit="onTargetOrder" data-type="all" report-submit="true">
+            <button formType="submit" class="btn-normal">
+              <text class="order-navbar__icon iconfont icon-form"></text>
+              <text class="order-navbar__name">全部订单</text>
+            </button>
+          </form>
+        </view>
+        <view class="order-navbar-item flex-box">
+          <form bindsubmit="onTargetOrder" data-type="payment" report-submit="true">
+            <button formType="submit" class="btn-normal">
+              <text class="order-navbar__icon iconfont icon-daifukuan"></text>
+              <text class="order-navbar__name">待付款</text>
+              <text class="order-badge" wx:if="{{orderCount.payment > 0}}">{{orderCount.payment}}</text>
+            </button>
+          </form>
+        </view>
+        <view class="order-navbar-item flex-box">
+          <form bindsubmit="onTargetOrder" data-type="received" report-submit="true">
+            <button formType="submit" class="btn-normal">
+              <text class="order-navbar__icon iconfont icon-daishouhuo"></text>
+              <text class="order-navbar__name">待收货</text>
+              <text class="order-badge" wx:if="{{orderCount.received > 0}}">{{orderCount.received}}</text>
+            </button>
+          </form>
+        </view>
+        <view class="order-navbar-item flex-box">
+          <text class="order-navbar__icon iconfont icon-daipingjia"></text>
+          <text class="order-navbar__name">待评价</text>
+          <text class="order-badge" wx:if="{{ false }}"></text>
+        </view>
+      </view>
+    </view>
+  </view>
+  <!-- 菜单列表 -->
+  <view class="menus-list m-top20">
+    <form bindsubmit="onTargetMenus" data-url="pages/address/index" report-submit="true">
+      <button formType="submit" class="btn-normal">
+        <view class="menus-item dis-flex b-f">
+          <view class="menus-item__left flex-box dis-flex flex-y-center">
+            <text class="iconfont icon-map f-34"></text>
+            <text class="menus-item__name f-30">收货地址</text>
+          </view>
+          <view class="menus-item__right flex-box dis-flex flex-x-end flex-y-center">
+            <text class="iconfont icon-xiangyoujiantou f-26 col-7"></text>
+          </view>
+        </view>
+      </button>
+    </form>
+    <form bindsubmit="onTargetMenus" data-url="pages/user/help" report-submit="true">
+      <button formType="submit" class="btn-normal">
+        <view class="menus-item dis-flex b-f">
+          <view class="menus-item__left flex-box dis-flex flex-y-center">
+            <text class="iconfont icon-help f-34"></text>
+            <text class="menus-item__name f-30">我的帮助</text>
+          </view>
+          <view class="menus-item__right flex-box dis-flex flex-x-end flex-y-center">
+            <text class="iconfont icon-xiangyoujiantou f-26 col-7"></text>
+          </view>
+        </view>
+      </button>
+    </form>
+  </view>
+</view>

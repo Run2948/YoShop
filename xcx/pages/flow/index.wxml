@@ -1,0 +1,53 @@
+<view class="container p-bottom">
+  <view class="flow-list">
+    <view wx:if="{{goods_list.length}}">
+      <view wx:for="{{goods_list}}" wx:key="this">
+        <view class="dish-item" data-index="{{index}}" style="{{item.txtStyle}}">
+          <view class="dish-item-wrp">
+            <navigator hover-class="none" url="../goods/index?goods_id={{item.goods_id}}">
+              <view class="dish-item-pic">
+                <image class="image" src="{{item.image[0].file_path}}"></image>
+              </view>
+            </navigator>
+            <view class="dish-item-info">
+              <navigator hover-class="none" url="../goods/index?goods_id={{item.goods_id}}">
+                <view class="goods-name">
+                  <text class="twolist-hidden f-30 col-3">{{item.goods_name}}</text>
+                </view>
+                <view class="goods-attr">
+                  <text class="col-7 f-24">{{item.goods_sku.goods_attr}}</text>
+                </view>
+                <view class="wx-goods_price">
+                  <text class="dish-item-money">￥{{item.goods_price}} </text>
+                </view>
+              </navigator>
+              <view class="selectNumber">
+                <button bindtap="minusCount" class="default {{item.total_num>1?'':' default-active'}}" data-index="{{index}}" data-sku-id="{{item.goods_sku_id}}" type="default">-</button>
+                <input bindinput="import" disabled="{{true}}" type="number" value="{{item.total_num}}"></input>
+                <button bindtap="addCount" class="default" data-index="{{index}}" data-sku-id="{{item.goods_sku_id}}" type="default">+</button>
+              </view>
+              <view catchtap="del" class="flow-dete" data-goods-id="{{item.goods_id}}" data-sku-id="{{item.goods_sku_id}}">
+                <text class="iconfont icon-lajixiang"></text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+      <view class="cart-tab-wrp">
+        <view class="cart-item-total cart-tab-item">
+          <text class="cart-item-total-price h4">合计：￥{{order_total_price}}</text>
+        </view>
+        <view class="cart-tab-item">
+          <view bindtap="submit" class="cart-tab-item-btn h4">去结算</view>
+        </view>
+      </view>
+    </view>
+    <view wx:else>
+      <view class="yoshop-notcont">
+        <text class="iconfont icon-ziyuan"></text>
+        <text class="cont">亲，购物车还没有商品哦</text>
+        <view bindtap="goShopping" class="flow-btn-min">去逛逛</view>
+      </view>
+    </view>
+  </view>
+</view>

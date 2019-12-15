@@ -13,12 +13,12 @@ namespace YoShop.Components
     [ViewComponent(Name = "Navigation")]
     public class NavigationViewComponent : ViewComponent
     {
-        private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IWebHostEnvironment _hostingEnvironment;
         /// <summary>
         /// 视图组件
         /// </summary>
         /// <param name="hostingEnvironment"></param>
-        public NavigationViewComponent(IHostingEnvironment hostingEnvironment)
+        public NavigationViewComponent(IWebHostEnvironment hostingEnvironment)
         {
             _hostingEnvironment = hostingEnvironment;
         }

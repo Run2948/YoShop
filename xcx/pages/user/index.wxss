@@ -1,0 +1,113 @@
+/* 用户信息 */
+
+.user {
+  position: relative;
+  background: #fff;
+  margin-bottom: 150rpx;
+}
+
+.user-header {
+  display: flex;
+  padding-top: 1px;
+  width: 100%;
+  height: 310rpx;
+  align-content: center;
+  background-color: #fd0;
+  background-repeat: no-repeat;
+  background-position: center right;
+  background-size: auto 100%;
+}
+
+.user-header .user-header-cont {
+  display: flex;
+  margin: auto;
+  margin-bottom: 135rpx;
+  width: 79%;
+  align-items: center;
+}
+
+.user-header .user-header-cont .user-header-avatar {
+  display: block;
+  margin-right: 30rpx;
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  border: 5rpx solid #fff;
+  overflow: hidden;
+}
+
+/* 订单导航栏 */
+
+.order-navbar {
+  position: absolute;
+  left: 19rpx;
+  bottom: -125rpx;
+  margin: auto;
+  padding: 15rpx 0;
+  width: 95%;
+  box-shadow: 0 1rpx 5rpx 0px rgba(0, 0, 0, 0.05);
+  font-size: 30rpx;
+  border-top: 1rpx solid #eee;
+  border-radius: 5rpx;
+  background: #fff;
+}
+
+.order-navbar-header {
+  margin: auto;
+  padding-bottom: 10rpx;
+  width: 91%;
+  height: 70rpx;
+  border-bottom: 1px solid #eee;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.order-navbar-footer {
+  width: 100%;
+  padding: 10rpx 0px;
+}
+
+.order-navbar-footer .order-navbar-item .order-navbar__icon {
+  text-align: center;
+  margin: 0 auto;
+  display: block;
+  padding: 10rpx 0;
+  color: #000;
+  font-size: 36rpx;
+}
+
+.order-navbar-footer .order-navbar-item .order-navbar__name {
+  display: block;
+  font-size: 24rpx;
+  color: #666;
+  text-align: center;
+  margin-right: 10rpx;
+}
+
+.order-navbar-footer .order-navbar-item .order-badge {
+  position: absolute;
+  top: 0;
+  right: 55rpx;
+  font-size: 22rpx;
+  background: #ff495e;
+  text-align: center;
+  line-height: 28rpx;
+  color: #fff;
+  border-radius: 100%;
+  min-height: 30rpx;
+  min-width: 30rpx;
+  padding: 1rpx;
+}
+
+/* 菜单列表 */
+
+.menus-list .menus-item {
+  position: relative;
+  padding: 28rpx 28rpx;
+  border-bottom: 1rpx solid #eee;
+}
+
+.menus-list .menus-item .menus-item__name {
+  color: #444;
+  margin-left: 20rpx;
+}

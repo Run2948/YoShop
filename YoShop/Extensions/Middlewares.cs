@@ -9,7 +9,6 @@ using Masuit.Tools.Logging;
 using Masuit.Tools.Core.Net;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.ResponseCompression;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using YoShop.Extensions.Common;
 
@@ -41,18 +40,6 @@ namespace YoShop.Extensions
             try
             {
                 await _next.Invoke(context);
-            }
-            catch (DbUpdateConcurrencyException ex)
-            {
-                var err = $"异常源：{ex.Source}，异常类型：{ex.GetType().Name}，\n请求路径：{context.Request.Scheme}://{context.Request.Host}{HttpUtility.UrlDecode(context.Request.Path)}，请求参数：{HttpUtility.UrlDecode(context.Request.Body.ReadToEnd(Encoding.UTF8))}，客户端用户代理：{context.Request.Headers["User-Agent"]}，客户端IP：{context.Connection.RemoteIpAddress}\t{ex.InnerException?.Message}\t";
-                LogManager.Error(err, ex);
-                await RedirectError(context);
-            }
-            catch (DbUpdateException ex)
-            {
-                var err = $"异常源：{ex.Source}，异常类型：{ex.GetType().Name}，\n请求路径：{context.Request.Scheme}://{context.Request.Host}{HttpUtility.UrlDecode(context.Request.Path)}，请求参数：{HttpUtility.UrlDecode(context.Request.Body.ReadToEnd(Encoding.UTF8))}，客户端用户代理：{context.Request.Headers["User-Agent"]}，客户端IP：{context.Connection.RemoteIpAddress}\t{ex?.InnerException?.Message}\t";
-                LogManager.Error(err, ex);
-                await RedirectError(context);
             }
             catch (AggregateException ex)
             {

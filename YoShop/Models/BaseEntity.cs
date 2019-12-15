@@ -9,16 +9,16 @@ namespace YoShop.Models
 {
     public class WxappEntity : BaseEntity
     {
-        [JsonProperty, Column(Name = "wxapp_id", DbType = "int(11) unsigned")]
+        [JsonProperty("wxapp_id"), Column(Name = "wxapp_id", DbType = "int(11) unsigned")]
         public uint WxappId { get; set; }
     }
 
     public class BaseEntity
     {
-        [JsonProperty, Column(Name = "update_time", DbType = "int(11) unsigned")]
-        public uint UpdateTime { get; set; }
-
-        [JsonProperty, Column(Name = "create_time", DbType = "int(11) unsigned")]
+        [JsonProperty("create_time"), Column(Name = "create_time", DbType = "int(11) unsigned")]
         public uint CreateTime { get; set; }
+
+        [JsonIgnore,JsonProperty("update_time"), Column(Name = "update_time", DbType = "int(11) unsigned")]
+        public uint UpdateTime { get; set; }
     }
 }

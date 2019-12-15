@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <UserSecretsId>ad541ba7-4abc-49ee-8d8e-b2d40b778402</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
@@ -10,16 +10,14 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="8.0.0" />
-    <PackageReference Include="CSRedisCore" Version="3.1.17" />
-    <PackageReference Include="FreeSql.DbContext" Version="0.12.6" />
-    <PackageReference Include="FreeSql.Extensions.LazyLoading" Version="0.12.6" />
-    <PackageReference Include="FreeSql.Provider.MySql" Version="0.12.6" />
-    <PackageReference Include="Masuit.Tools.Core" Version="2.2.6.4" />
-    <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="2.10.0" PrivateAssets="All" />
+    <PackageReference Include="CSRedisCore" Version="3.2.0" />
+    <PackageReference Include="FreeSql.DbContext" Version="0.12.18" />
+    <PackageReference Include="FreeSql.Provider.MySql" Version="0.12.18" />
+    <PackageReference Include="Masuit.Tools.Core" Version="2.2.7.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.9.5" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.4" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.0" />
     <PackageReference Include="Z.ExtensionMethods" Version="2.1.1" />
   </ItemGroup>
 
