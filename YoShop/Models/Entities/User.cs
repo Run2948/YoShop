@@ -8,13 +8,16 @@ namespace YoShop.Models
     [JsonObject(MemberSerialization.OptIn), Table(Name = "user")]
     public partial class User : WxappEntity
     {
-        [JsonProperty, Column(Name = "user_id", DbType = "int(11) unsigned", IsIdentity = true,IsPrimary = true)]
+        [JsonProperty("user_id"), Column(Name = "user_id", DbType = "int(11) unsigned", IsIdentity = true, IsPrimary = true)]
         public uint UserId { get; set; }
 
-        [JsonProperty, Column(Name = "open_id")]
+        [JsonProperty("address"), Navigate(nameof(UserId))]
+        public virtual List<UserAddress> UserAddress { get; set; }
+
+        [JsonProperty("open_id"), Column(Name = "open_id")]
         public string OpenId { get; set; }
 
-        [JsonProperty, Column(Name = "nick_name")]
+        [JsonProperty("nickName"), Column(Name = "nick_name")]
         public string NickName { get; set; }
 
         [JsonProperty, Column(Name = "gender")]
@@ -32,10 +35,10 @@ namespace YoShop.Models
         [JsonProperty, Column(Name = "city", DbType = "varchar(50)")]
         public string City { get; set; }
 
-        [JsonProperty, Column(Name = "address_id", DbType = "int(11) unsigned")]
+        [JsonProperty("address_id"), Column(Name = "address_id", DbType = "int(11) unsigned")]
         public uint AddressId { get; set; }
 
-        [Navigate(nameof(AddressId))]
-        public virtual UserAddress UserAddress { get; set; }
+        [JsonProperty("default_address"), Navigate(nameof(AddressId))]
+        public virtual UserAddress DefaultAddress { get; set; }
     }
 }

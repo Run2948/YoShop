@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
-using YoShop.Controllers;
 using YoShop.Extensions;
 using YoShop.Extensions.Common;
 using YoShop.Models;
@@ -13,7 +12,7 @@ using YoShop.WeChat;
 
 namespace YoShop.Areas.Api.Controllers
 {
-    public class UserController : BaseController
+    public class UserController : ApiBaseController
     {
         private readonly IFreeSql _fsql;
         private readonly WxHttpClient _wxHttpClient;
@@ -46,7 +45,7 @@ namespace YoShop.Areas.Api.Controllers
                 // 微信登录 获取session_key
                 var session = await WxLogin(request.WxappId, request.Code);
                 // 自动注册用户
-                var userId = WxRegister(session.OpenId, request.UserInfo);
+                var userId = await WxRegister(session.OpenId, request.UserInfo);
                 // 生成token (session3rd)
                 var token = WxToken(request.WxappId, session.OpenId);
                 // 记录缓存, 7天
@@ -78,7 +77,7 @@ namespace YoShop.Areas.Api.Controllers
             wxappUser.City = requestUser.City;
             if (wxappUser.UserId > 0)
             {
-                await _fsql.Update<User>().SetSource(wxappUser).ExecuteAffrowsAsync();
+                await _fsql.Update<User>().DisableGlobalFilter().SetSource(wxappUser).ExecuteAffrowsAsync();
                 return wxappUser.UserId;
             }
             wxappUser.OpenId = openId;

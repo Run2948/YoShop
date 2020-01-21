@@ -53,7 +53,7 @@ namespace YoShop.Models
 
         [JsonProperty("delivery_id"), Column(Name = "delivery_id", DbType = "int(11) unsigned")]
         public uint DeliveryId { get; set; }
-        
+
         [JsonProperty("delivery")]
         public virtual Delivery Delivery { get; set; }
     }

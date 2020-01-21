@@ -7,6 +7,7 @@ using YoShop.WeChat.Common;
 
 namespace YoShop.WeChat
 {
+    [Serializable]
     public class SnsResult : WxResult
     {
         /// <summary>

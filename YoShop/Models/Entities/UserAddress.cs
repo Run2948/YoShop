@@ -2,35 +2,37 @@ using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
-using YoShop.Models;
 
-namespace YoShop
+namespace YoShop.Models
 {
     [JsonObject(MemberSerialization.OptIn), Table(Name = "user_address")]
     public partial class UserAddress : WxappEntity
     {
-        [JsonProperty, Column(Name = "address_id", DbType = "int(11) unsigned", IsIdentity = true, IsPrimary = true)]
+        [JsonProperty("address_id"), Column(Name = "address_id", DbType = "int(11) unsigned", IsIdentity = true, IsPrimary = true)]
         public uint AddressId { get; set; }
 
-        [JsonProperty, Column(Name = "user_id", DbType = "int(11) unsigned")]
+        [JsonProperty("user_id"), Column(Name = "user_id", DbType = "int(11) unsigned")]
         public uint UserId { get; set; }
 
-        [JsonProperty, Column(Name = "name", DbType = "varchar(30)")]
+        [JsonProperty("name"), Column(Name = "name", DbType = "varchar(30)")]
         public string Name { get; set; }
 
-        [JsonProperty, Column(Name = "phone", DbType = "varchar(20)")]
+        [JsonProperty("phone"), Column(Name = "phone", DbType = "varchar(20)")]
         public string Phone { get; set; }
 
-        [JsonProperty, Column(Name = "province_id", DbType = "int(11) unsigned")]
+        [JsonProperty("province_id"), Column(Name = "province_id", DbType = "int(11) unsigned")]
         public uint ProvinceId { get; set; }
 
-        [JsonProperty, Column(Name = "city_id", DbType = "int(11) unsigned")]
+        [JsonProperty("city_id"), Column(Name = "city_id", DbType = "int(11) unsigned")]
         public uint CityId { get; set; }
 
-        [JsonProperty, Column(Name = "region_id", DbType = "int(11) unsigned")]
+        [JsonProperty("region_id"), Column(Name = "region_id", DbType = "int(11) unsigned")]
         public uint RegionId { get; set; }
 
-        [JsonProperty, Column(Name = "detail")]
+        [JsonProperty("region"), Navigate(nameof(RegionId))]
+        public virtual Region Region { get; set; }
+
+        [JsonProperty("detail"), Column(Name = "detail")]
         public string Detail { get; set; }
     }
 }

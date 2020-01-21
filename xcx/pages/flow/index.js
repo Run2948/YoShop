@@ -31,6 +31,7 @@ Page({
   getCartList: function() {
     let _this = this;
     App._get('cart/lists', {}, function(result) {
+      console.log(result.data);
       _this.setData(result.data);
     });
   },
@@ -50,9 +51,9 @@ Page({
       mask: true
     })
     App._post_form('cart/add', {
-      goods_id: goods.goods_id,
-      goods_num: 1,
-      goods_sku_id: goodsSkuId
+      goodsId: goods.goods_id,
+      goodsNum: 1,
+      goodsSkuId: goodsSkuId
     }, function() {
       goods.total_num++;
       _this.setData({
@@ -105,8 +106,8 @@ Page({
       content: "您确定要移除当前商品吗?",
       success: function(e) {
         e.confirm && App._post_form('cart/delete', {
-          goods_id,
-          goods_sku_id: goodsSkuId
+          goodsId,
+          goodsSkuId: goodsSkuId
         }, function(result) {
           _this.getCartList();
         });

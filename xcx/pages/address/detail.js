@@ -10,7 +10,6 @@ Page({
     nav_select: false, // 快捷导航
     region: '',
     detail: {},
-
     error: '',
   },
 
@@ -19,7 +18,7 @@ Page({
    */
   onLoad: function(options) {
     // 获取当前地址信息
-    this.getAddressDetail(options.address_id);
+    this.getAddressDetail(options.addressId);
   },
 
   /**
@@ -28,7 +27,7 @@ Page({
   getAddressDetail: function(address_id) {
     let _this = this;
     App._get('address/detail', {
-      address_id
+      addressId:address_id
     }, function(result) {
       _this.setData(result.data);
     });
@@ -39,7 +38,7 @@ Page({
    */
   saveData: function(e) {
     let _this = this,
-      values = e.detail.value
+    values = e.detail.value
     values.region = this.data.region;
 
     // 记录formId
@@ -57,7 +56,7 @@ Page({
     });
 
     // 提交到后端
-    values.address_id = _this.data.detail.address_id;
+    values.addressId = _this.data.detail.address_id;
     App._post_form('address/edit', values, function(result) {
       App.showSuccess(result.msg, function() {
         wx.navigateBack();

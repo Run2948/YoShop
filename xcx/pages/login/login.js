@@ -28,19 +28,20 @@ Page({
     // 执行微信登录
     wx.login({
       success: function (res) {
+        console.log(res);
         // 发送用户信息
         App._post_form('user/login'
           , {
             code: res.code,
-            user_info: e.detail.rawData,
-            encrypted_data: e.detail.encryptedData,
+            userInfo: e.detail.rawData,
+            encryptedData: e.detail.encryptedData,
             iv: e.detail.iv,
             signature: e.detail.signature
           }
           , function (result) {
             // 记录token user_id
             wx.setStorageSync('token', result.data.token);
-            wx.setStorageSync('user_id', result.data.user_id);
+            wx.setStorageSync('user_id', result.data.userId);
             // 跳转回原页面
             _this.navigateBack();
           }

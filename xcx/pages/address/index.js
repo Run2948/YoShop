@@ -40,7 +40,7 @@ Page({
    */
   editAddress: function(e) {
     wx.navigateTo({
-      url: "./detail?address_id=" + e.currentTarget.dataset.id
+      url: "./detail?addressId=" + e.currentTarget.dataset.id
     });
   },
 
@@ -55,7 +55,7 @@ Page({
       content: "您确定要移除当前收货地址吗?",
       success: function(o) {
         o.confirm && App._post_form('address/delete', {
-          address_id
+          addressId: address_id
         }, function(result) {
           _this.getAddressList();
         });
@@ -73,7 +73,7 @@ Page({
       default_id: parseInt(address_id)
     });
     App._post_form('address/setDefault', {
-      address_id
+      addressId: address_id
     }, function(result) {
       _this.data.options.from === 'flow' && wx.navigateBack();
     });

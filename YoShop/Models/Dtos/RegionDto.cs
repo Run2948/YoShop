@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace YoShop.Models
 {
@@ -18,5 +19,14 @@ namespace YoShop.Models
         public List<RegionDto> City { get; set; }
 
         public List<RegionDto> Region { get; set; }
+    }
+
+    public class AddressRegionDto
+    {
+        public string Province { get; set; }
+
+        public string City { get; set; }
+
+        public string Region { get; set; }
     }
 }

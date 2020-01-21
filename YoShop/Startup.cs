@@ -45,9 +45,9 @@ namespace YoShop
                 .UseConnectionString(FreeSql.DataType.MySql, Configuration.GetConnectionString("Mysql"))
                 //.UseLazyLoading(false) //开启延时加载功能，相当于执行了 1+N 次数据库查询，比较适合【 WinForm 开发】像树形结构，可以点击再展开UI，使用 Include(a => a.UploadFile) 只会查一次数据库
                 //由于null会默认输出日志到控制台，影响测试结果。这里传入一个空的日志输出对象
-                //                .UseMonitorCommand(cmd => Console.WriteLine(cmd.CommandText)) //监听SQL命令对象，在执行前
+                .UseMonitorCommand(cmd => Console.WriteLine(cmd.CommandText)) //监听SQL命令对象，在执行前
                 .UseAutoSyncStructure(true) //自动同步实体结构【开发环境必备】
-                .UseNoneCommandParameter(true) //不使用命令参数化执行，针对 Insert/Update
+                .UseNoneCommandParameter(true) //不使用命令参数化执行，针对 Insert/Update 方便调试时直接展示无参SQL
                 .Build();
             fsql.Aop.ConfigEntityProperty += (_, e) =>
             {
@@ -84,7 +84,7 @@ namespace YoShop
                     // 注意，http://127.0.0.1:1818 和 http://localhost:1818 是不一样的，尽量写两个
                     policy
                         // 不支持向所有域名开放， AllowAnyOrigin 不可用
-//                        .WithOrigins(AppSettings.app(new string[] { "Startup", "Cors", "IPs" }).Split(','))
+                        //                        .WithOrigins(AppSettings.app(new string[] { "Startup", "Cors", "IPs" }).Split(','))
                         .AllowAnyHeader()//允许任何头
                         .AllowAnyMethod()//允许任何方式
                         .AllowCredentials();//允许cookie
@@ -106,7 +106,7 @@ namespace YoShop
                 //每 5 分钟进行一次过期缓存的扫描
                 options.ExpirationScanFrequency = TimeSpan.FromMinutes(5);
                 // 最大缓存空间大小限制为 1024
-                options.SizeLimit = 1024;
+                // options.SizeLimit = 1024;
             });
             //注入静态HttpContext
             services.AddHttpContextAccessor();

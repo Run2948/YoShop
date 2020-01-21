@@ -172,7 +172,7 @@ App({
   _post_form(url, data, success, fail, complete) {
     wx.showNavigationBarLoading();
     let App = this;
-    data.wxapp_id = App.siteInfo.uniacid;
+    data.wxappId = App.siteInfo.uniacid;
     data.token = wx.getStorageSync('token');
     wx.request({
       url: App.api_root + url,

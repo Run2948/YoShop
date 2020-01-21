@@ -16,10 +16,8 @@ namespace YoShop.WeChat
     {
         public string Code { get; set; }
 
-        [JsonProperty("user_info")]
         public string UserInfo { get; set; }
 
-        [JsonProperty("encrypted_data")]
         public string EncryptedData { get; set; }
 
         public string Iv { get; set; }
